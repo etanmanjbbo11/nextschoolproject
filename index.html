@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oleh Ethan, Nicholas, dan Reinhard</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏫</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg:#fdf7ff; --s1:#f7f1fb; --s2:#f1ebf6; --s3:#e9e2ef; --card:#fffbff;
+      --on:#1d1b20; --on2:#4a4553; --line:#cdc4d6;
+      --p:#6342e8; --on-p:#fff; --pc:#e4dbff; --on-pc:#1d0b6b;
+      --t:#1a7a4c; --on-t:#fff; --tc:#bdf0d3; --on-tc:#00391f;
+      --s:#b3511a; --on-s:#fff; --sc:#ffd9c4; --on-sc:#4a1d00;
+      --pk:#ffcfe6; --danger:#b3261e;
+      --spring:cubic-bezier(.34,1.56,.64,1);
+      --display:'Outfit','Segoe UI',system-ui,sans-serif;
+      --body:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+      --shadow:0 2px 4px rgba(60,40,110,.08),0 16px 32px -14px rgba(60,40,110,.35);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#141218; --s1:#1d1b20; --s2:#231f29; --s3:#2d2934; --card:#1f1c25;
+        --on:#e6e0e9; --on2:#cac4d0; --line:#4a4553;
+        --p:#cfbcff; --on-p:#2c1a6b; --pc:#4a3a9c; --on-pc:#e4dbff;
+        --t:#7fd8a6; --on-t:#00391f; --tc:#1f5c3d; --on-tc:#bdf0d3;
+        --s:#ffb68a; --on-s:#4a1d00; --sc:#6b3412; --on-sc:#ffd9c4;
+        --pk:#5a2b4b; --danger:#f2b8b5;
+        --shadow:0 2px 4px rgba(0,0,0,.3),0 16px 32px -14px rgba(0,0,0,.7);
+      }
+    }
+
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--on); font-family:var(--body); line-height:1.5; min-height:100vh; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+    button, input, select, textarea { font:inherit; color:inherit; }
+    :focus-visible { outline:3px solid var(--p); outline-offset:3px; }
+    .hidden { display:none !important; }
+
+    /* ---------- Moving background ---------- */
+    .bg { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+    .blob { position:absolute; filter:blur(48px); opacity:.85; will-change:transform; }
+    .b1 { width:50vmax; height:50vmax; background:var(--bg1,#074eb3); top:-16vmax; right:-4vmax; animation:d1 10s ease-in-out infinite alternate; }
+.b2 { width:42vmax; height:42vmax; background:var(--bg2,#005695); top:18vh; left:-14vmax; animation:d2 12s ease-in-out infinite alternate; }
+.b3 { width:46vmax; height:46vmax; background:var(--bg3,#063153); bottom:-20vmax; left:12vw; animation:d3 11s ease-in-out infinite alternate; }
+.b4 { width:30vmax; height:30vmax; background:var(--bg4,#004B87); bottom:6vh; right:8vw; animation:d1 13s ease-in-out infinite alternate-reverse; }
+    .confetti { position:absolute; opacity:.55; animation:bob 7s ease-in-out infinite; }
+    .c1 { width:26px; height:26px; border-radius:50%; background:var(--p); top:22%; left:46%; }
+    .c2 { width:34px; height:34px; border-radius:10px; border:4px solid var(--t); top:64%; left:8%; animation-duration:9s; transform:rotate(18deg); }
+    .c3 { width:20px; height:20px; border-radius:50% 50% 50% 8px; background:var(--s); top:80%; right:30%; animation-duration:8s; }
+    .c4 { width:44px; height:44px; border-radius:50%; border:4px dotted var(--p); top:12%; right:12%; animation-duration:11s; }
+
+    @keyframes morph {
+      0%,100% { border-radius:60% 40% 55% 45% / 50% 60% 40% 50%; }
+      33% { border-radius:40% 60% 45% 55% / 60% 40% 60% 40%; }
+      66% { border-radius:55% 45% 60% 40% / 40% 55% 45% 60%; }
+    }
+    @keyframes d1 { to { transform:translate(14vw,10vh) rotate(40deg); } }
+    @keyframes d2 { to { transform:translate(-18vw,14vh) rotate(-30deg); } }
+    @keyframes d3 { to { transform:translate(12vw,-16vh) rotate(25deg); } }
+    @keyframes bob { 50% { translate:0 -18px; } }
+    @keyframes pop { from { opacity:0; transform:translateY(26px) scale(.82); } to { opacity:1; transform:none; } }
+    @keyframes rise { from { opacity:0; transform:translateY(40px) scale(.94); } to { opacity:1; transform:none; } }
+    @keyframes ripple { to { transform:scale(1); opacity:0; } }
+
+    .shell { position:relative; z-index:1; width:100%; max-width:1240px; margin:0 auto; padding:0 24px; }
+
+    /* ---------- Top bar ---------- */
+    .topbar { position:sticky; top:12px; z-index:30; margin-top:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+      padding:8px 10px 8px 12px; border-radius:999px; box-shadow:var(--shadow);
+      background:color-mix(in srgb,var(--card) 80%,transparent); backdrop-filter:blur(16px); animation:rise .7s var(--spring) both; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand-mark { width:44px; height:44px; display:grid; place-items:center; font-size:1.3rem; background:var(--pc);
+      border-radius:60% 40% 55% 45% / 50% 60% 40% 50%; animation:morph 9s ease-in-out infinite; }
+    .brand-text { font-size:.82rem; color:var(--on2); line-height:1.25; }
+    .brand-text b { display:block; color:var(--on); font-size:.95rem; font-weight:700; }
+    .topbar-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .badge-role { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 14px; font-size:.85rem; font-weight:600; color:var(--on2); }
+    .badge-role::before { content:""; width:10px; height:10px; border-radius:50%; background:var(--line); }
+    .badge-role.is-admin { color:var(--on); }
+    .badge-role.is-admin::before { background:var(--t); box-shadow:0 0 0 4px color-mix(in srgb,var(--t) 25%,transparent); }
+
+    /* ---------- Buttons ---------- */
+    .btn-action, .btn-accent, .chip, .room, .floor-link { position:relative; overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+    .btn-action, .btn-accent { height:44px; padding:0 20px; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:0; border-radius:22px;
+      font-size:.9rem; font-weight:700; background:var(--s3); color:var(--on);
+      transition:border-radius .3s cubic-bezier(.2,.8,.2,1), transform .35s var(--spring), background .2s; }
+    .btn-action:hover { background:var(--pc); color:var(--on-pc); }
+    .btn-action.is-active, .btn-action.is-active:hover { background:var(--p); color:var(--on-p); border-radius:14px; }
+    .btn-action:active, .btn-accent:active { border-radius:14px; transform:scale(.94); }
+    .btn-accent { background:var(--p); color:var(--on-p); }
+    .btn-accent:hover { border-radius:16px; }
+    .btn-danger { background:color-mix(in srgb,var(--danger) 12%,var(--s2)); color:var(--danger); }
+    .btn-danger:hover { background:color-mix(in srgb,var(--danger) 22%,var(--s2)); color:var(--danger); }
+    .ripple { position:absolute; border-radius:50%; background:currentColor; opacity:.22; transform:scale(0); animation:ripple .6s ease-out forwards; pointer-events:none; }
+
+    /* ---------- Hero ---------- */
+    .hero { position:relative; padding:56px 0 20px; }
+    .hero-kicker { display:inline-block; padding:6px 14px; border-radius:999px; background:var(--tc); color:var(--on-tc); font-size:.86rem; font-weight:700; margin-bottom:18px; animation:rise .7s .1s var(--spring) both; }
+    .hero h1 { font-family:var(--display); font-weight:800; font-size:clamp(2.0rem,6.5vw,5rem); line-height:.96; letter-spacing:-.035em; max-width:11ch; animation:rise .8s .2s var(--spring) both; }
+    .hero-lede { margin-top:22px; max-width:46ch; font-size:1.1rem; color:var(--on2); animation:rise .8s .35s var(--spring) both; }
+    .stickers { position:absolute; inset:0 0 0 auto; width:min(46%,440px); pointer-events:none; }
+    .stickers span { position:absolute; display:grid; place-items:center; font-size:2.3rem; box-shadow:var(--shadow); animation:morph 8s ease-in-out infinite, bob 5s ease-in-out infinite; }
+    .stickers span:nth-child(1) { width:92px; height:92px; right:46%; top:6%; background:var(--pc); }
+    .stickers span:nth-child(2) { width:104px; height:104px; right:4%; top:18%; background:var(--tc); animation-delay:-2s,-1s; }
+    .stickers span:nth-child(3) { width:84px; height:84px; right:34%; top:54%; background:var(--sc); animation-delay:-4s,-2s; }
+    .stickers span:nth-child(4) { width:96px; height:96px; right:0; top:62%; background:var(--pk); animation-delay:-1s,-3s; }
+
+    /* ---------- Layout ---------- */
+    .layout { display:grid; grid-template-columns:270px 1fr; gap:32px; align-items:start; padding:32px 0 100px; }
+    .sidebar { position:sticky; top:96px; display:flex; flex-direction:column; gap:26px; animation:rise .8s .45s var(--spring) both; }
+    .side-label { font-size:.82rem; font-weight:700; color:var(--on2); margin:0 0 10px 6px; }
+    .search { position:relative; }
+    .search svg { position:absolute; left:18px; top:50%; transform:translateY(-50%); width:18px; height:18px; color:var(--on2); pointer-events:none; }
+    .input-field, .select-field, .textarea-field { width:100%; background:var(--s2); border:2px solid transparent; border-radius:16px; padding:12px 14px; font-size:.92rem; outline:none; transition:border-color .2s, background .2s, border-radius .3s cubic-bezier(.2,.8,.2,1); }
+    .search .input-field { height:54px; border-radius:999px; padding-left:46px; background:var(--s3); }
+    .input-field:focus, .select-field:focus, .textarea-field:focus { border-color:var(--p); background:var(--card); }
+    .textarea-field { resize:vertical; min-height:74px; }
+
+    .chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .chip { display:inline-flex; align-items:center; gap:8px; padding:9px 16px; border:0; border-radius:20px; background:var(--s3); font-size:.86rem; font-weight:700;
+      transition:border-radius .3s cubic-bezier(.2,.8,.2,1), transform .4s var(--spring), background .2s; }
+    .chip:hover { background:var(--pc); color:var(--on-pc); }
+    .chip:active { transform:scale(.92); }
+    .chip i { width:10px; height:10px; border-radius:50%; background:var(--dot,var(--on2)); transition:transform .4s var(--spring); }
+    .chip[aria-pressed="true"] { background:var(--p); color:var(--on-p); border-radius:14px; }
+    .chip[aria-pressed="true"] i { transform:scale(1.25); box-shadow:0 0 0 2px var(--on-p); }
+
+    [data-floor="1"] { --fc:var(--p); --fc-on:var(--on-p); }
+    [data-floor="2"] { --fc:var(--t); --fc-on:var(--on-t); }
+    [data-floor="3"] { --fc:var(--s); --fc-on:var(--on-s); }
+
+    .floor-nav { display:flex; flex-direction:column; gap:6px; }
+    .floor-link { display:flex; align-items:center; gap:12px; padding:8px 14px 8px 8px; border-radius:999px; color:inherit; text-decoration:none; font-size:.92rem; font-weight:700; transition:background .2s, transform .35s var(--spring); }
+    .floor-link:hover { background:var(--s3); transform:translateX(4px); }
+    .floor-link small { display:block; color:var(--on2); font-weight:500; font-size:.78rem; }
+    .mini-plate { width:40px; height:40px; display:grid; place-items:center; flex-shrink:0; background:var(--fc); color:var(--fc-on); font-family:var(--display); font-weight:800; font-size:1.15rem; border-radius:14px; transition:border-radius .3s cubic-bezier(.2,.8,.2,1), transform .5s var(--spring); }
+    .floor-link:hover .mini-plate { border-radius:20px; transform:rotate(-12deg) scale(1.08); }
+
+    /* ---------- Floors ---------- */
+    .floor { background:color-mix(in srgb,var(--s1) 82%,transparent); border-radius:40px; padding:22px 22px 26px; margin-bottom:24px; scroll-margin-top:90px; }
+    .floor-head { display:flex; align-items:center; gap:16px; margin-bottom:18px; }
+    .plate { width:78px; height:78px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1; flex-shrink:0; background:var(--fc); color:var(--fc-on);
+      border-radius:60% 40% 55% 45% / 50% 60% 40% 50%; animation:morph 10s ease-in-out infinite; }
+    .plate small { font-size:.68rem; font-weight:700; opacity:.8; margin-bottom:2px; }
+    .plate b { font-family:var(--display); font-size:2.7rem; font-weight:800; letter-spacing:-.04em; }
+    .floor-count { padding:6px 14px; border-radius:999px; background:var(--s3); font-weight:700; font-size:.86rem; white-space:nowrap; }
+    .rule { flex:1; height:4px; border-radius:4px; background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 16px); opacity:.7; }
+
+    .room-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(222px,1fr)); gap:14px; }
+    [data-cat="classroom"] { --cc:var(--pc); --cc-on:var(--on-pc); --cs:var(--p); }
+    [data-cat="laboratory"] { --cc:var(--tc); --cc-on:var(--on-tc); --cs:var(--t); }
+    [data-cat="facility"] { --cc:var(--sc); --cc-on:var(--on-sc); --cs:var(--s); }
+    [data-cat="restricted"] { --cc:var(--tc); --cc-on:var(--on-tc); --cs:var(--t); }
+
+    .room { text-align:left; display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; padding:16px; border:0; border-radius:28px; background:var(--card);
+      box-shadow:0 1px 2px rgba(60,40,110,.08);
+      transition:transform .45s var(--spring), border-radius .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s, background .3s; }
+    .room:hover { transform:translateY(-6px) rotate(-.6deg); border-radius:36px 20px 36px 20px; box-shadow:var(--shadow); background:color-mix(in srgb,var(--cc) 35%,var(--card)); }
+    .room:active { transform:scale(.95); }
+    .room-icon { width:54px; height:54px; display:grid; place-items:center; font-size:1.6rem; background:var(--cc); border-radius:18px; transition:border-radius .3s cubic-bezier(.2,.8,.2,1), transform .5s var(--spring); }
+    .room:hover .room-icon { border-radius:27px; transform:rotate(12deg) scale(1.1); }
+    .room-name { display:block; font-weight:800; font-size:.98rem; line-height:1.2; }
+    .room-foot { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:2px; }
+    .room-kind { padding:3px 11px; border-radius:999px; background:var(--cc); color:var(--cc-on); font-size:.74rem; font-weight:800; }
+    .room-seats { font-size:.8rem; font-weight:700; color:var(--on2); }
+    .media-state { grid-column:1/-1; display:inline-flex; align-items:center; gap:7px; font-size:.78rem; color:var(--on2); font-weight:600; }
+    .media-state::before { content:""; width:8px; height:8px; border-radius:50%; background:var(--line); }
+    .media-state.has-media::before { background:var(--t); box-shadow:0 0 0 3px color-mix(in srgb,var(--t) 25%,transparent); }
+
+    .revisit #hero .hero-kicker, .revisit #hero h1, .revisit #hero .hero-lede, .revisit .layout .sidebar { animation:none !important; }
+    .enter .floor { animation:rise .8s var(--spring) both; }
+    .enter .room { animation:pop .6s var(--spring) both; animation-delay:calc(var(--i,0)*45ms + 120ms); }
+    .empty { border:3px dashed var(--line); border-radius:40px; padding:56px 24px; text-align:center; color:var(--on2); }
+    .empty b { display:block; color:var(--on); font-size:1.2rem; font-family:var(--display); margin-bottom:4px; }
+
+    /* ---------- Modals ---------- */
+    .modal { position:fixed; inset:0; z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px;
+      background:color-mix(in srgb,var(--on) 40%,transparent); backdrop-filter:blur(8px); opacity:0; pointer-events:none; transition:opacity .25s; }
+    .modal.open { opacity:1; pointer-events:auto; }
+    .modal-card { position:relative; width:100%; max-width:680px; max-height:90vh; overflow-y:auto; padding:32px; border-radius:40px; background:var(--card);
+      box-shadow:0 30px 70px -20px rgba(0,0,0,.5); transform:scale(.8) translateY(40px) rotate(-2deg); opacity:0; transition:transform .55s var(--spring), opacity .25s; }
+    .modal.open .modal-card { transform:none; opacity:1; }
+    .modal-card h2 { font-family:var(--display); font-weight:800; font-size:1.8rem; letter-spacing:-.02em; line-height:1.1; }
+    .modal-close { position:absolute; top:18px; right:18px; width:40px; height:40px; border:0; border-radius:20px; background:var(--s3); cursor:pointer; display:grid; place-items:center; transition:transform .4s var(--spring), border-radius .3s cubic-bezier(.2,.8,.2,1), background .2s; }
+    .modal-close:hover { background:var(--pc); transform:rotate(90deg); border-radius:14px; }
+    .modal-header { display:flex; gap:16px; align-items:flex-start; padding-right:44px; }
+    .modal-icon { width:64px; height:64px; display:grid; place-items:center; font-size:2rem; flex-shrink:0; background:var(--cc,var(--s3)); border-radius:60% 40% 55% 45% / 50% 60% 40% 50%; animation:morph 8s ease-in-out infinite; }
+    .pill-badge { display:inline-block; padding:3px 12px; border-radius:999px; font-size:.76rem; font-weight:800; margin-bottom:6px; background:var(--cc,var(--s3)); color:var(--cc-on,var(--on)); }
+    .media-summary-bar { display:flex; gap:8px; flex-wrap:wrap; margin:22px 0 4px; }
+    .summary-chip { background:var(--s2); padding:7px 14px; border-radius:999px; font-size:.84rem; color:var(--on2); font-weight:600; }
+    .summary-chip b { color:var(--on); }
+    .media-gallery { margin:20px 0 4px; }
+    .carousel { position:relative; border-radius:28px; overflow:hidden; background:var(--s2); }
+    .car-track { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
+    .car-track::-webkit-scrollbar { display:none; }
+    .car-slide { flex:0 0 100%; scroll-snap-align:center; aspect-ratio:4/3; }
+    .car-slide a, .car-slide img, .car-slide video, .car-slide iframe { display:block; width:100%; height:100%; border:0; }
+    .car-slide img, .car-slide video { object-fit:cover; }
+    .car-link, .car-fail { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; height:100%; color:var(--on2); font-weight:700; text-align:center; text-decoration:none; padding:20px; }
+    .big { font-size:2.2rem; }
+    .car-btn { position:absolute; top:50%; translate:0 -50%; width:48px; height:48px; border:0; border-radius:24px; font-size:1.6rem; line-height:1; cursor:pointer;
+      background:color-mix(in srgb,var(--card) 88%,transparent); backdrop-filter:blur(8px); box-shadow:var(--shadow);
+      transition:transform .35s var(--spring), border-radius .3s cubic-bezier(.2,.8,.2,1), background .2s; }
+    .car-btn:hover { background:var(--pc); border-radius:16px; transform:scale(1.08); }
+    .car-btn:active { transform:scale(.9); }
+    .car-btn.prev { left:12px; } .car-btn.next { right:12px; }
+    .car-count { position:absolute; top:12px; right:12px; padding:4px 12px; border-radius:999px; font-size:.78rem; font-weight:800; background:color-mix(in srgb,var(--card) 88%,transparent); backdrop-filter:blur(8px); }
+    .car-dots { display:flex; justify-content:center; gap:8px; margin-top:14px; }
+    .car-dot { width:10px; height:10px; border:0; border-radius:5px; background:var(--line); cursor:pointer; transition:width .35s var(--spring), background .2s; }
+    .car-dot.on { width:30px; background:var(--p); }
+    .car-empty { display:flex; flex-direction:column; align-items:center; gap:6px; padding:36px 20px; border:3px dashed var(--line); border-radius:28px; color:var(--on2); font-weight:600; }
+    .form-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    .full-width { grid-column:1/-1; }
+    .field-label { display:block; font-size:.82rem; font-weight:700; color:var(--on2); margin:0 0 6px 6px; }
+    .modal-footer { display:flex; align-items:center; justify-content:flex-end; gap:10px; margin-top:24px; padding-top:18px; }
+    .modal-footer:has(> .hidden:only-child) { display:none; }
+
+
+    /* ---------- Room viewer in hero ---------- */
+    .stickers span { transition:transform .5s var(--spring), opacity .3s; }
+    .stickers span:nth-child(2) { transition-delay:.05s; } .stickers span:nth-child(3) { transition-delay:.1s; } .stickers span:nth-child(4) { transition-delay:.15s; }
+    .hero[data-mode="room"] .stickers span { transform:scale(.2); opacity:0; animation-play-state:paused; }
+    .hero[data-mode="room"] { min-height:400px; }
+    .hero[data-mode="room"] h1 { font-size:clamp(2.2rem,6vw,4.4rem); max-width:13ch; }
+    .hero[data-mode="room"] .hero-kicker { background:var(--cc); color:var(--cc-on); }
+    .hero[data-mode="room"] .hero-lede { margin-top:16px; font-size:1.15rem; color:var(--on); max-width:40ch; }
+    .room-info { display:none; margin-top:22px; }
+    .hero[data-mode="room"] .room-info { display:block; animation:rise .7s .15s var(--spring) both; }
+    .room-info .media-summary-bar { margin:0; }
+    .room-info .summary-chip { background:var(--cc); color:var(--cc-on); }
+    .room-info .summary-chip b { color:inherit; }
+    .room-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+    .room.selected { box-shadow:0 0 0 3px var(--cs), var(--shadow); }
+
+    .docs { display:none; position:absolute; right:0; top:44px; width:min(44%,420px); }
+    .hero[data-mode="room"] .docs { display:block; }
+    .stack { position:relative; display:block; width:100%; aspect-ratio:4/3; padding:0; border:0; background:none; font:inherit; color:inherit; text-align:left; cursor:pointer; }
+    div.stack { cursor:default; }
+    .doc-card { position:absolute; inset:0 0 36px 44px; border-radius:28px; overflow:hidden; background:var(--s2); box-shadow:var(--shadow);
+      z-index:calc(10 - var(--k,0)); transform:translate(calc(var(--k,0)*-14px),calc(var(--k,0)*12px)) rotate(calc(var(--k,0)*-3deg));
+      transition:transform .55s var(--spring); animation:stackIn .6s var(--spring) backwards; animation-delay:calc(var(--k,0)*90ms + 250ms); }
+    button.stack:hover .doc-card { transform:translate(calc(var(--k,0)*-26px),calc(var(--k,0)*16px)) rotate(calc(var(--k,0)*-6deg)); }
+    button.stack:hover .doc-card:first-child { transform:translateY(-6px) rotate(1deg); }
+    button.stack:active .doc-card:first-child { transform:scale(.97); }
+    .doc-card img, .doc-card video { display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; }
+    .doc-card .big { font-size:2.4rem; }
+    .doc-card.empty { display:grid; place-content:center; justify-items:center; gap:8px; padding:16px; background:var(--cc); color:var(--cc-on); font-weight:700; text-align:center; }
+    .doc-card.empty .big { font-size:3.4rem; }
+    .doc-card:not(.empty):has(.big) { display:grid; place-items:center; background:var(--cc); }
+    .stack-hint { position:absolute; left:12px; bottom:12px; padding:5px 12px; border-radius:999px; font-size:.78rem; font-weight:800; background:color-mix(in srgb,var(--card) 88%,transparent); backdrop-filter:blur(8px); }
+    @keyframes stackIn { from { opacity:0; transform:translateY(34px) scale(.8); } }
+
+    .docs-open { display:none; position:relative; }
+    .hero[data-docs="open"] .docs { position:static; width:100%; max-width:880px; aspect-ratio:auto; margin-top:28px; }
+    .hero[data-docs="open"] #docsStack { display:none; }
+    .hero[data-docs="open"] .docs-open { display:block; animation:pop .6s var(--spring) both; }
+    .docs-open .carousel { box-shadow:var(--shadow); }
+    .docs-open .car-slide { aspect-ratio:16/9; max-height:68vh; }
+    .car-collapse { position:absolute; top:12px; left:12px; z-index:3; height:36px; padding:0 14px; border:0; border-radius:18px; font-size:.82rem; font-weight:800; cursor:pointer;
+      background:color-mix(in srgb,var(--card) 88%,transparent); backdrop-filter:blur(8px); box-shadow:var(--shadow); transition:background .2s, transform .35s var(--spring); }
+    .car-collapse:hover { background:var(--pc); }
+    .car-collapse:active { transform:scale(.92); }
+    @media (max-width:860px) {
+      .hero[data-mode="room"] { min-height:0; }
+      .docs { position:relative; top:auto; right:auto; width:min(100%,380px); margin-top:26px; }
+    }
+    @media (max-width:860px) {
+      .layout { grid-template-columns:1fr; gap:24px; }
+      .sidebar { position:static; }
+      .floor-nav { flex-direction:row; overflow-x:auto; padding-bottom:4px; }
+      .floor-link { flex-shrink:0; background:var(--s3); }
+      .stickers span:nth-child(n+3) { display:none; }
+      .stickers { width:40%; }
+      .topbar { border-radius:28px; }
+    }
+    @media (max-width:560px) {
+      .shell { padding:0 14px; }
+      .stickers { display:none; }
+      .form-grid { grid-template-columns:1fr; }
+      .floor { padding:16px 14px 20px; border-radius:32px; }
+      .plate { width:64px; height:64px; }
+      .plate b { font-size:2.1rem; }
+      .modal-card { padding:26px 20px; border-radius:32px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      *, *::before, *::after { animation:none !important; transition:none !important; }
+    }
+
+    /* ---------- Hero emojis: aligned grid ---------- */
+    .stickers { inset:56px 0 20px auto; width:auto; display:grid; grid-template-columns:repeat(2,96px); gap:20px; align-content:center; justify-content:end; }
+    .stickers span:nth-child(n) { position:relative; right:auto; top:auto; width:96px; height:96px; }
+    .stickers span:nth-child(even) { margin-top:40px; }
+    @media (max-width:860px) {
+      .stickers { grid-template-columns:repeat(2,72px); gap:14px; width:auto; }
+      .stickers span:nth-child(n) { width:72px; height:72px; font-size:1.8rem; }
+      .stickers span:nth-child(even) { margin-top:28px; }
+    }
+
+    /* ---------- Continuous looping carousel ---------- */
+    .mq { position:relative; padding:14px 0; border-radius:28px; background:var(--s2); box-shadow:var(--shadow); }
+    .mq-view { overflow:hidden; border-radius:20px; -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent); mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent); }
+    .mq-rail { display:flex; gap:16px; width:max-content; will-change:transform; }
+    .mq-slide { flex:0 0 auto; width:min(540px,72vw); aspect-ratio:16/10; border-radius:22px; overflow:hidden; background:var(--s3); }
+    .mq-slide a, .mq-slide img, .mq-slide video, .mq-slide iframe { display:block; width:100%; height:100%; border:0; }
+    .mq-slide img, .mq-slide video { object-fit:cover; }
+    .mq.single .mq-view { -webkit-mask-image:none; mask-image:none; }
+    .mq.single .mq-rail { width:100%; justify-content:center; }
+    .mq .car-btn.prev { left:10px; } .mq .car-btn.next { right:10px; }
+    .mq-toggle { position:absolute; right:16px; bottom:18px; z-index:3; height:36px; padding:0 14px; border:0; border-radius:18px; font-size:.8rem; font-weight:800; cursor:pointer;
+      background:color-mix(in srgb,var(--card) 88%,transparent); backdrop-filter:blur(8px); box-shadow:var(--shadow); transition:background .2s, transform .35s var(--spring); }
+    .mq-toggle:hover { background:var(--pc); }
+    .mq-toggle:active { transform:scale(.92); }
+
+    /* ---------- Home photo pile + full-width expanded view ---------- */
+    .hero[data-docs="open"] .docs { max-width:none; }
+    .home-pile { position:absolute; right:0; top:44px; width:min(44%,440px); pointer-events:none; transition:opacity .35s, transform .5s var(--spring), visibility 0s; }
+    .hero[data-mode="room"] .home-pile { opacity:0; transform:scale(.8); visibility:hidden; transition:opacity .35s, transform .5s var(--spring), visibility 0s .5s; }
+    .doc-card { transition:transform .7s var(--spring), opacity .4s; }
+    .doc-card.ph { display:grid; place-content:center; justify-items:center; gap:6px; background:var(--ph,var(--pc)); color:var(--ph-on,var(--on-pc)); font-weight:700; text-align:center; padding:16px; border:3px dashed color-mix(in srgb,var(--ph-on,var(--on-pc)) 35%,transparent); }
+    .doc-card.ph .big { font-size:3rem; }
+    
+    @keyframes toss {
+      0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+      40% { transform: translate(80px, -40px) rotate(12deg); opacity: 1; }
+      100% { transform: translate(calc(var(--k, 3) * -14px), calc(var(--k, 3) * 12px)) rotate(calc(var(--k, 3) * -3deg)); opacity: 0; }
+    }
+    .doc-card.toss {
+      animation: toss .6s var(--spring) forwards !important;
+      z-index: 11 !important;
+    }
+
+    @media (min-width:861px) { .hero[data-mode="home"] { min-height:440px; } }
+    @media (max-width:860px) {
+      .home-pile { position:relative; top:auto; right:auto; width:min(100%,380px); margin-top:26px; }
+      .hero[data-mode="room"] .home-pile { display:none; }
+    }
+
+    /* ---------- Teachers & faculty ---------- */
+    .teachers-view { position:relative; padding-bottom:100px; animation:rise .7s var(--spring) both; }
+    .teachers-view .hero h1 { max-width:16ch; }
+    .teachers-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+    .teachers-panel { padding:22px 22px 26px; border-radius:40px; background:color-mix(in srgb,var(--s1) 82%,transparent); }
+    .teacher-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(236px,1fr)); gap:16px; }
+    .teacher[data-tone="0"] { --cc:var(--pc); --cc-on:var(--on-pc); --cs:var(--p); }
+    .teacher[data-tone="1"] { --cc:var(--tc); --cc-on:var(--on-tc); --cs:var(--t); }
+    .teacher[data-tone="2"] { --cc:var(--sc); --cc-on:var(--on-sc); --cs:var(--s); }
+    .teacher { display:flex; flex-direction:column; gap:14px; padding:12px 12px 18px; border-radius:32px; background:var(--card); box-shadow:0 1px 2px rgba(60,40,110,.08);
+      animation:pop .6s var(--spring) both; animation-delay:calc(var(--i,0)*80ms + 80ms);
+      transition:transform .45s var(--spring), border-radius .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s, background .3s; }
+    .teacher:hover { transform:translateY(-6px) rotate(-.6deg); border-radius:40px 22px 40px 22px; box-shadow:var(--shadow); background:color-mix(in srgb,var(--cc) 35%,var(--card)); }
+    .teacher-photo { position:relative; aspect-ratio:4/5; border-radius:24px; overflow:hidden; background:var(--cc); transition:border-radius .3s cubic-bezier(.2,.8,.2,1); }
+    .teacher:hover .teacher-photo { border-radius:34px 16px 34px 16px; }
+    .teacher-photo img { display:block; width:100%; height:100%; object-fit:cover; }
+    .teacher-initials { display:grid; place-items:center; width:100%; height:100%; font-family:var(--display); font-weight:800; font-size:3.4rem; color:var(--cc-on); }
+    .teacher-body { display:flex; flex-direction:column; gap:6px; padding:0 8px; }
+    .teacher-title { align-self:flex-start; padding:3px 12px; border-radius:999px; background:var(--cc); color:var(--cc-on); font-size:.74rem; font-weight:800; line-height:1.3; }
+    .teacher-name { font-family:var(--display); font-weight:800; font-size:1.12rem; line-height:1.2; }
+    .teacher-subject { font-size:.88rem; font-weight:600; color:var(--on2); }
+    .teacher-subject small { display:block; font-size:.74rem; font-weight:700; opacity:.8; }
+    .teacher-actions { display:flex; gap:8px; padding:0 8px; margin-top:2px; }
+    .teacher-actions .btn-action { height:36px; padding:0 14px; font-size:.8rem; border-radius:18px; }
+    .photo-preview { display:flex; align-items:center; gap:14px; }
+    .photo-preview-img { width:72px; height:90px; flex-shrink:0; border-radius:18px; overflow:hidden; background:var(--s3); display:grid; place-items:center; font-size:.72rem; font-weight:700; color:var(--on2); text-align:center; }
+    .photo-preview-img img { width:100%; height:100%; object-fit:cover; display:block; }
+    @media (max-width:560px) { .teachers-panel { padding:16px 14px 20px; border-radius:32px; } .teacher-grid { grid-template-columns:1fr 1fr; gap:12px; } .teacher { padding:8px 8px 14px; border-radius:26px; } .teacher-name { font-size:.98rem; } }
+    @media (max-width:380px) { .teacher-grid { grid-template-columns:1fr; } }
+
+    /* ---------- Settings ---------- */
+    html.lite { scroll-behavior:auto; }
+    .lite .bg { display:none; }
+    .lite *, .lite *::before, .lite *::after { animation:none !important; transition:none !important; }
+
+    .hide-deco .confetti, .hide-deco .stickers { display:none !important; }
+    .hide-hero #hero[data-mode="home"] { display:none; }
+    .hide-hero .teachers-view { padding-top:28px; }
+    .hide-hero .settings-view .hero { display:none; }
+    .hide-hero .teachers-view .hero { padding:0; }
+    .hide-hero .teachers-view .hero > :not(.teachers-actions) { display:none; }
+    .hide-hero .teachers-view .teachers-actions { margin-top:0; }
+    .hide-hero .teachers-view .teachers-actions:has(> :not(.hidden)) { margin-bottom:18px; }
+    .pw-form { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px; }
+    .pw-actions { grid-column:1/-1; display:flex; align-items:center; flex-wrap:wrap; gap:14px; }
+    .pw-msg { font-size:.88rem; font-weight:700; }
+    .pw-msg.err { color:var(--danger); }
+    .pw-msg.ok { color:var(--t); }
+    @media (max-width:720px) { .pw-form { grid-template-columns:1fr; } }
+    .layout.no-sidebar { grid-template-columns:1fr; }
+    .layout.no-sidebar .sidebar { display:none; }
+    .setting-row.static { cursor:default; }
+    .setting-row.static:hover { background:var(--card); }
+    .swatches { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:14px; }
+    .swatch { position:relative; width:44px; height:44px; border-radius:14px; background:var(--sw); border:2px solid var(--line); cursor:pointer; overflow:hidden;
+      transition:transform .35s var(--spring), border-radius .3s; }
+    .swatch:hover { transform:scale(1.08); border-radius:20px; }
+    .swatch:focus-within { outline:3px solid var(--p); outline-offset:3px; }
+    .swatch input { position:absolute; top:-8px; left:-8px; width:calc(100% + 16px); height:calc(100% + 16px); padding:0; border:0; opacity:0; cursor:pointer; }
+    .swatches .btn-action { height:40px; margin-left:6px; }
+    .settings-list { display:flex; flex-direction:column; gap:12px; }
+    .settings-rows { display:flex; flex-direction:column; gap:12px; }
+    .settings-hub { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px; }
+    .setting-tile[data-tone="0"] { --cc:var(--pc); --cc-on:var(--on-pc); }
+    .setting-tile[data-tone="1"] { --cc:var(--tc); --cc-on:var(--on-tc); }
+    .setting-tile[data-tone="2"] { --cc:var(--sc); --cc-on:var(--on-sc); }
+    .setting-tile[data-tone="3"] { --cc:var(--s3); --cc-on:var(--on); }
+    .setting-tile { aspect-ratio:1/1; min-height:180px; display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; padding:22px; border:0; border-radius:32px;
+      background:var(--cc); color:var(--cc-on); text-align:left; cursor:pointer; font-family:inherit; -webkit-tap-highlight-color:transparent;
+      animation:pop .6s var(--spring) both; animation-delay:calc(var(--i,0)*80ms + 60ms);
+      transition:transform .45s var(--spring), border-radius .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; }
+    .setting-tile:hover { transform:translateY(-6px) rotate(-.6deg); border-radius:44px 22px 44px 22px; box-shadow:var(--shadow); }
+    .setting-tile:active { transform:scale(.95); border-radius:22px; }
+    .setting-tile:focus-visible { outline:3px solid var(--p); outline-offset:3px; }
+    .tile-icon { width:52px; height:52px; display:grid; place-items:center; border-radius:18px; background:color-mix(in srgb,var(--cc-on) 14%,transparent); }
+    .tile-icon svg { width:28px; height:28px; }
+    .tile-title { display:block; font-family:var(--display); font-weight:800; font-size:1.25rem; line-height:1.15; }
+    .tile-sub { display:block; margin-top:6px; font-size:.84rem; font-weight:600; opacity:.8; }
+    .settings-detail-head { display:flex; align-items:flex-start; flex-wrap:wrap; gap:16px; margin-bottom:18px; }
+    .detail-title { font-family:var(--display); font-weight:800; font-size:1.6rem; line-height:1.15; }
+    .detail-desc { margin-top:4px; font-size:.95rem; color:var(--on2); }
+    @media (max-width:560px) { .settings-hub { grid-template-columns:1fr 1fr; gap:12px; } .setting-tile { min-height:0; padding:16px; border-radius:26px; } .tile-title { font-size:1.05rem; } }
+    .setting-row { display:flex; align-items:center; gap:20px; padding:20px 22px; border-radius:28px; background:var(--card); cursor:pointer; -webkit-tap-highlight-color:transparent;
+      animation:pop .6s var(--spring) both; animation-delay:calc(var(--i,0)*70ms + 60ms); transition:background .25s; }
+    .setting-row:hover { background:color-mix(in srgb,var(--pc) 35%,var(--card)); }
+    .setting-text { flex:1; min-width:0; }
+    .setting-title { font-family:var(--display); font-weight:800; font-size:1.1rem; line-height:1.2; }
+    .setting-desc { margin-top:4px; font-size:.9rem; color:var(--on2); max-width:62ch; }
+
+    /* Material 3 Expressive switch */
+    .m3-switch { position:relative; flex-shrink:0; width:52px; height:32px; padding:0; border-radius:16px; border:2px solid var(--on2); background:var(--s3); cursor:pointer;
+      transition:background .3s, border-color .3s; }
+    .m3-switch .knob { position:absolute; top:6px; left:6px; width:16px; height:16px; border-radius:50%; background:var(--on2); color:var(--p); display:grid; place-items:center;
+      transition:left .45s var(--spring), top .45s var(--spring), width .45s var(--spring), height .45s var(--spring), background .3s, box-shadow .2s; }
+    .m3-switch .knob svg { width:16px; height:16px; opacity:0; transform:scale(.4); transition:opacity .2s, transform .45s var(--spring); }
+    .m3-switch[aria-checked="true"] { background:var(--p); border-color:var(--p); }
+    .m3-switch[aria-checked="true"] .knob { left:22px; top:2px; width:24px; height:24px; background:var(--on-p); }
+    .m3-switch[aria-checked="true"] .knob svg { opacity:1; transform:none; }
+    .m3-switch:hover .knob { box-shadow:0 0 0 8px color-mix(in srgb,var(--on) 8%,transparent); }
+    .m3-switch[aria-checked="true"]:hover .knob { box-shadow:0 0 0 8px color-mix(in srgb,var(--on-p) 16%,transparent); }
+    .m3-switch:active .knob { left:0; top:0; width:28px; height:28px; }
+    .m3-switch[aria-checked="true"]:active .knob { left:20px; top:0; width:28px; height:28px; }
+
+    /* Password gate */
+    .settings-gate { max-width:460px; margin:0 auto; padding:14px 0 10px; display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; }
+    .gate-icon { width:64px; height:64px; display:grid; place-items:center; background:var(--pc); color:var(--on-pc); border-radius:60% 40% 55% 45% / 50% 60% 40% 50%; animation:morph 8s ease-in-out infinite; }
+    .gate-icon svg { width:28px; height:28px; }
+    .settings-gate h2 { font-family:var(--display); font-weight:800; font-size:1.5rem; line-height:1.2; }
+    .settings-gate p { color:var(--on2); font-size:.95rem; }
+    .gate-form { width:100%; display:flex; gap:10px; margin-top:6px; }
+    .gate-form .input-field { flex:1; min-width:0; }
+    .gate-form.shake { animation:shake .4s; }
+    .gate-error { min-height:1.3em; font-size:.88rem; font-weight:700; color:var(--danger); }
+    @keyframes shake { 20%,60% { transform:translateX(-8px); } 40%,80% { transform:translateX(8px); } }
+    @media (max-width:560px) { .setting-row { padding:16px; gap:14px; border-radius:24px; } .gate-form { flex-direction:column; } }
+ 
+/* Forgot password (master PIN) */
+.forgot-link { display:inline-block; padding:4px 10px; border-radius:10px; border:0; background:none; cursor:pointer; font-family:inherit; font-size:.88rem; font-weight:700; color:var(--p); text-decoration:none; transition:background .2s, border-radius .3s; }
+.forgot-link:hover { background:var(--pc); color:var(--on-pc); border-radius:14px; }
+.forgot-panel { width:100%; margin-top:14px; }
+.admin-notice .forgot-panel { margin-top:4px; }
+.forgot-title { font-family:var(--display); font-weight:800; font-size:1.15rem; line-height:1.2; }
+.forgot-text { margin:4px 0 12px; font-size:.9rem; color:var(--on2); }
+.forgot-form { display:flex; flex-direction:column; gap:10px; }
+.admin-notice .forgot-form { align-items:stretch; }
+.forgot-form.shake { animation:shake .4s; }
+.forgot-msg { min-height:1.3em; margin-top:8px; font-size:.88rem; font-weight:700; }
+.forgot-msg.err { color:var(--danger); }
+.forgot-msg.ok { color:var(--t); }
+.forgot-foot { display:flex; flex-wrap:wrap; gap:4px 8px; margin-top:8px; }
+.settings-gate .forgot-foot { justify-content:center; }
+
+/* Centered & Enlarged Admin Login Notification */
+.admin-notice {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-30px) scale(0.95);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 22px;
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 18px 45px -12px rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--line);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s var(--spring), opacity 0.25s;
+  width: min(90vw, 440px);
+}
+
+.admin-notice.open {
+  transform: translateX(-50%) translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.admin-notice form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.admin-notice .input-field {
+  height: 48px;
+  padding: 0 18px;
+  font-size: 0.95rem;
+  flex: 1;
+  border-radius: 24px;
+}
+
+.admin-notice .btn-accent, 
+.admin-notice .btn-action {
+  height: 48px;
+  padding: 0 20px;
+  font-size: 0.92rem;
+  border-radius: 24px;
+}
+
+.admin-notice-error {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--danger);
+  display: none;
+  text-align: center;
+}
+
+.admin-notice-error.show {
+  display: block;
+}
+ </style>
+</head>
+<body>
+
+  <div class="bg" aria-hidden="true">
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span>
+    <span class="confetti c1"></span><span class="confetti c2"></span><span class="confetti c3"></span><span class="confetti c4"></span>
+  </div>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">🏫</div>
+        <div class="brand-text">
+          <b>Sekolah Kristen IPEKA Sunter II</b>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <span class="badge-role" id="accessStatus">Public Viewer</span>
+        <button class="btn-action is-active" id="closeTeachersBtn" type="button" aria-current="page">Denah Gedung</button>
+        <button class="btn-action" id="teachersBtn" type="button">Guru-Guru</button>
+        <button class="btn-action" id="settingsBtn" type="button">Settings</button>
+        <button class="btn-action" id="adminLoginBtn">Admin Login</button>
+        <button class="btn-accent hidden" id="addClassroomBtn">＋ Add Room</button>
+        <button class="btn-action btn-danger hidden" id="adminLogoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <section class="hero" id="hero" data-mode="home">
+      <p class="hero-kicker" id="heroKicker">Denah & Ruangan Gedung Sekolah</p>
+      <h1 id="heroTitle">Sekolah Kristen IPEKA Sunter II</h1>
+      <p class="hero-lede" id="heroLede">Sekolah ini didirikan pada tahun 2000 oleh Yayasan Iman, Pengharapan, dan Kasih (IPEKA), yang merupakan salah satu yayasan di bawah naungan sinode Gereja Kristus Yesus (GKY).</p>
+      <div class="room-info" id="roomInfo">
+        <div class="media-summary-bar">
+          <div class="summary-chip">🏢 Floor <b id="roomFloor">1</b></div>
+          <div class="summary-chip">👥 Capacity <b id="roomCapacity">30</b></div>
+          <div class="summary-chip">📷 Photos <b id="photoCount">0</b></div>
+          <div class="summary-chip">🎬 Videos <b id="videoCount">0</b></div>
+        </div>
+        <div class="room-actions">
+          <button class="btn-action" id="closeRoomBtn" type="button">← Exit</button>
+          <button class="btn-action hidden" id="editRoomBtn" type="button">✏️ Edit Room &amp; Media</button>
+          <button class="btn-action btn-danger hidden" id="deleteRoomBtn" type="button">🗑️ Delete</button>
+        </div>
+      </div>
+      <div class="docs" id="docs">
+        <div id="docsStack"></div>
+        <div class="docs-open" id="docsOpen"></div>
+      </div>
+      <div class="home-pile" aria-label="School photos"><div class="stack" id="homeStack"></div></div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Find a room">
+        <div class="filter-block">
+          <label class="side-label" for="searchInput">Filter by Keyword</label>
+          <div class="search">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="6"/><path d="M14 14l4 4"/></svg>
+            <input type="search" class="input-field" id="searchInput" placeholder="Room name..." autocomplete="off">
+          </div>
+        </div>
+
+        <div class="filter-block">
+          <div class="side-label" id="filterLabel">Filter by Category</div>
+          <div class="chips" role="group" aria-labelledby="filterLabel" id="filterChips">
+            <button type="button" class="chip" data-filter="All" aria-pressed="true"><i></i>All</button>
+            <button type="button" class="chip" data-filter="Classroom" aria-pressed="false" style="--dot: var(--c-classroom)"><i></i>Classroom</button>
+            <button type="button" class="chip" data-filter="Laboratory" aria-pressed="false" style="--dot: var(--c-laboratory)"><i></i>Laboratory</button>
+            <button type="button" class="chip" data-filter="Facility" aria-pressed="false" style="--dot: var(--c-facility)"><i></i>Facility</button>
+            <button type="button" class="chip" data-filter="Restricted" aria-pressed="false" style="--dot: var(--c-restricted)"><i></i>Restricted</button>
+          </div>
+        </div>
+
+        <div class="floor-block">
+          <div class="side-label">Jump to floor</div>
+          <nav class="floor-nav" id="floorNav" aria-label="Floors"></nav>
+        </div>
+      </aside>
+
+      <main id="markers"></main>
+    </div>
+
+    <section class="teachers-view hidden" id="teachersView" aria-label="Guru-Guru">
+      <div class="hero">
+        <p class="hero-kicker">Fakultas</p>
+        <h1>Guru-Guru</h1>
+        <p class="hero-lede">Kenali para guru dan staf pengajar SMAK IPEKA Sunter II.</p>
+        <div class="teachers-actions">
+          
+          <button class="btn-accent hidden" id="addTeacherBtn" type="button">＋ Add Teacher</button>
+        </div>
+      </div>
+      <div class="teachers-panel">
+        <div class="teacher-grid" id="teacherGrid"></div>
+      </div>
+    </section>
+
+    <section class="teachers-view settings-view hidden" id="settingsView" aria-label="Settings">
+      <div class="hero">
+        <p class="hero-kicker">Configuration</p>
+        <h1>Settings</h1>
+        <p class="hero-lede">Adjust how the site looks and behaves.</p>
+      </div>
+      <div class="teachers-panel">
+        <div class="settings-gate" id="settingsGate">
+          <div class="gate-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>
+          </div>
+          <h2>Settings are locked</h2>
+          <p data-forgot-main="settings">Enter the administrator password to continue.</p>
+          <form class="gate-form" id="settingsGateForm" autocomplete="off" data-forgot-main="settings">
+            <input type="password" class="input-field" id="settingsPass" required placeholder="Enter password..." aria-label="Administrator password">
+            <button type="submit" class="btn-accent">Unlock</button>
+          </form>
+          <div class="gate-error" id="settingsGateError" role="alert" data-forgot-main="settings"></div>
+          <div data-forgot-main="settings"><button type="button" class="forgot-link" data-forgot="settings">Forgot password?</button></div>
+          <div class="forgot-panel hidden" id="forgotPanel-settings" data-back="Back to unlock"></div>
+        </div>
+        <div class="settings-list hidden" id="settingsList"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Add/Edit Room Modal -->
+  <div class="modal" id="formModal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('formModal')" aria-label="Close">✕</button>
+      <h2 id="formTitle" style="margin-bottom:20px;">Add Room</h2>
+
+      <form id="roomForm" onsubmit="handleSaveRoom(event)">
+        <div class="form-grid">
+          <div class="full-width">
+            <label class="field-label" for="fName">Room Name</label>
+            <input type="text" class="input-field" id="fName" required placeholder="e.g. Science Lab 1">
+          </div>
+          <div>
+            <label class="field-label" for="fFloor">Floor</label>
+            <select class="select-field" id="fFloor">
+              <option value="1">Floor 1</option>
+              <option value="2">Floor 2</option>
+              <option value="3">Floor 3</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="fCategory">Category</label>
+           <select class="select-field" id="fCategory">
+  <option value="Classroom">Classroom</option>
+  <option value="Laboratory">Laboratory</option>
+  <option value="Facility">Facility</option>
+  <option value="Restricted">Restricted</option>
+</select>
+          </div>
+          <div>
+            <label class="field-label" for="fCapacity">Capacity</label>
+            <input type="number" class="input-field" id="fCapacity" value="32" min="0">
+          </div>
+          <div>
+            <label class="field-label" for="fIcon">Icon Emoji</label>
+            <input type="text" class="input-field" id="fIcon" value="🎓">
+          </div>
+          <div class="full-width">
+            <label class="field-label" for="fDescription">Description (shown when the room is opened)</label>
+            <input type="text" class="input-field" id="fDescription" placeholder="Short room description">
+          </div>
+          <div class="full-width">
+            <label class="field-label" for="fImageUrls">Image URLs or Paths (separate multiple with commas)</label>
+            <textarea class="textarea-field" id="fImageUrls" placeholder="images/f1-1.jpg, images/f1-1-alt.jpg"></textarea>
+          </div>
+          <div class="full-width">
+            <label class="field-label" for="fVideoUrls">Video URLs or Links (separate multiple with commas)</label>
+            <textarea class="textarea-field" id="fVideoUrls" placeholder="https://www.youtube.com/watch?v=example, videos/f1-1.mp4"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-action" onclick="closeModal('formModal')">Cancel</button>
+          <button type="submit" class="btn-accent">Save Room &amp; Media</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- Admin Login Notification -->
+<div class="admin-notice" id="adminNotice">
+  <form id="adminNoticeForm" data-forgot-main="admin">
+    <input type="password" class="input-field" id="loginPass" placeholder="Enter admin password..." aria-label="Admin password" required autocomplete="current-password">
+    <button type="submit" class="btn-accent">Login</button>
+    <button type="button" class="btn-action" id="closeAdminNoticeBtn" aria-label="Close notification">✕</button>
+  </form>
+  <div class="admin-notice-error" id="adminNoticeErr" data-forgot-main="admin">Incorrect password. Please try again.</div>
+  <div data-forgot-main="admin"><button type="button" class="forgot-link" data-forgot="admin">Forgot password?</button></div>
+  <div class="forgot-panel hidden" id="forgotPanel-admin" data-back="Back to login"></div>
+</div>
+
+  <!-- Add/Edit Teacher Modal -->
+  <div class="modal" id="teacherFormModal">
+    <div class="modal-card" style="max-width:560px;">
+      <button class="modal-close" onclick="closeModal('teacherFormModal')" aria-label="Close">✕</button>
+      <h2 id="teacherFormTitle" style="margin-bottom:20px;">Add Teacher</h2>
+
+      <form id="teacherForm" onsubmit="handleSaveTeacher(event)">
+        <div class="form-grid">
+          <div class="full-width">
+            <label class="field-label" for="tName">Teacher Name</label>
+            <input type="text" class="input-field" id="tName" required placeholder="e.g. Ibu Maria Susanti, S.Pd.">
+          </div>
+          <div>
+            <label class="field-label" for="tSubject">Teacher Subject</label>
+            <input type="text" class="input-field" id="tSubject" required placeholder="e.g. Matematika">
+          </div>
+          <div>
+            <label class="field-label" for="tTitle">Teacher Title</label>
+            <input type="text" class="input-field" id="tTitle" required placeholder="e.g. Wali Kelas 10.1">
+          </div>
+          <div class="full-width">
+            <label class="field-label" for="tPhotoUrl">Photo URL or Path</label>
+            <input type="text" class="input-field" id="tPhotoUrl" placeholder="assets/guru-guru/maria.jpg">
+          </div>
+          <div class="full-width">
+            <label class="field-label" for="tPhotoFile">Or upload a photo</label>
+            <div class="photo-preview">
+              <div class="photo-preview-img" id="tPhotoPreview">No photo</div>
+              <input type="file" class="input-field" id="tPhotoFile" accept="image/*">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-action" onclick="closeModal('teacherFormModal')">Cancel</button>
+          <button type="submit" class="btn-accent">Save Teacher</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const INITIAL_ROOMS = [
+      // FLOOR 1
+       { 
+        id: "f1-0", 
+        name: "Entrance, Hall, Staircase", 
+        floor: "1", 
+        category: "Facility", 
+        capacity: 100, 
+        icon: "🚪", 
+        desc: "Masuk ke dalam gedung lewat sini", imageUrls: [
+          "assets/entrance/1.jpg", "assets/entrance/6.jpg"
+        ], 
+        videoUrls: ["assets/entrance/4.mp4", "assets/entrance/5.mp4"] 
+      },
+     { 
+        id: "f1-1", 
+        name: "Ruang Koordinator Lokasi", 
+        floor: "1", 
+        category: "Restricted", 
+        capacity: 1, 
+        icon: "💼", 
+        desc: "Kantor khusus Ibu Monique, selaku koordinator lokasi IPEKA Sunter.", imageUrls: ["assets/korlok/1.jpeg", "assets/korlok/2.jpeg"
+        ], 
+        videoUrls: [] 
+      },
+      { id: "f1-2", name: "Ruang Audio/Visual", floor: "1", category: "Facility", capacity: 80, icon: "🎬", desc: "Ruangan yang dilengkapi dengan peralatan audio dan visual, seperti proyektor, layar, dan pengeras suara, untuk mendukung kegiatan pembelajaran, presentasi, serta penyampaian informasi di sekolah.", imageUrls: ["assets/auvi/2.jpeg", "assets/auvi/3.jpeg", "assets/auvi/4.jpeg"], videoUrls: ["assets/auvi/1.mp4"] },
+      { id: "f1-3", name: "Kelas 10.3", floor: "1", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 10.3.", imageUrls: ["assets/kelas/10.3/1.jpg"], videoUrls: [] },
+      { id: "f1-4", name: "Ruang Seni Rupa", floor: "1", category: "Facility", capacity: 30, icon: "🎨", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid yang memilih seni rupa sebagai mata pelajaran pilihan kesenian.", imageUrls: [], videoUrls: [] },
+      { id: "f1-canteen", name: "Kantin", floor: "1", category: "Facility", capacity: 60, icon: "🍱", desc: "School Canteen & Dining Area", imageUrls: ["assets/kantin/3.jpg", "assets/kantin/4.jpg"], videoUrls: ["assets/kantin/1.mp4"] },
+      { id: "f1-5", name: "Toilet", floor: "1", category: "Facility", capacity: 15, icon: "🚽", desc: "Toilet sekolah merupakan fasilitas yang disediakan untuk memenuhi kebutuhan kebersihan para siswa, guru, dan orang-orang lain. Ada 3 fasilitas toilet di sekolah tersebut, dan setiap toilet sekolah berada di masing-masing lantai. Setiap toilet sekolah terdapat 4 urinal, 2 toilet, dan sebuah kloset. Selain itu, diluar fasilitas toilet terdapat wastafel dan cermin yang digunakan untuk mencuci tangan serta menjaga kebersihan diri.", imageUrls: ["assets/toilet/1.jpg", "assets/toilet/5.jpg"], videoUrls: ["assets/toilet/6.mp4", "assets/toilet/7.mp4", "assets/toilet/8.mp4"] },
+      { id: "f1-6", name: "Ruang Guru", floor: "1", category: "Facility", capacity: 25, icon: "☕", desc: "Ruang tersebut memiliki beberapa meja dan kursi guru, lemari penyimpanan dokumen, komputer, serta papan informasi. Di ruangan ini juga terdapat kotak penyimpanan handphone dari setiap kelas yang digunakan setelah kegiatan sekolah dimulai. Ruangan ini digunakan untuk mempersiapkan materi pembelajaran, memeriksa tugas siswa, dan beristirahat saat tidak mengajar.", imageUrls: ["assets/guru/1.jpg", "assets/guru/2.jpg"], videoUrls: [] },
+      { id: "f1-7", name: "Kelas 10.2", floor: "1", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 10.2.", imageUrls: ["assets/kelas/10.2/1.jpg"], videoUrls: [] },
+      { id: "f1-8", name: "Kelas 10.1", floor: "1", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 10.1.", imageUrls: ["assets/kelas/10.1/1.jpg", "assets/kelas/10.1/2.jpg", "assets/kelas/10.1/3.jpg"], videoUrls: [] },
+      { id: "f1-9", name: "Tata Usaha", floor: "1", category: "Restricted", capacity: 12, icon: "📋", desc: "Administrasi, akun sekolah, dan yang lainnya.", imageUrls: ["assets/tu/1.jpg"], videoUrls: ["assets/tu/2.mp4"] },
+      { id: "f1-10", name: "Koperasi Sekolah", floor: "1", category: "Facility", capacity: 8, icon: "🛒", desc: "Beli alat tulis, seragam, jas hujan, jasa printing, dan yang lainnya.", imageUrls: ["assets/koperasi/1.jpg", "assets/koperasi/2.jpg", "assets/koperasi/3.jpg", "assets/koperasi/4.jpg"], videoUrls: ["assets/koperasi/5.mp4"] },
+      { id: "f1-perpus", name: "Perpustakaan", floor: "1", category: "Facility", capacity: 15, icon: "📚", desc: "Tempat baca buku, melihat majalah, dan tempat pengenduran diri dengan suasana yang diam.", imageUrls: [], videoUrls: ["assets/perpus/1.mp4"] },
+
+      // FLOOR 2
+      { id: "f2-bk", name: "Ruang Konseling", floor: "2", category: "Facility", capacity: 10, icon: "🤝", desc: "Area konseling yang dapat digunakan oleh siswa untuk berdiskusi dan berinteraksi dengan Student Pathway Counselor ataupun guru Bimbingan Konseling.", imageUrls: ["assets/bk/1.jpg", "assets/bk/2.jpg", "assets/bk/3.jpg"], videoUrls: ["assets/bk/4.mp4"] },
+      { id: "f2-0", name: "Common Area", floor: "2", category: "Facility", capacity: 32, icon: "🎓", desc: "Area bersama yang dapat digunakan oleh siswa untuk berkumpul, berdiskusi, bersantai, dan berinteraksi dengan teman-teman di luar kegiatan pembelajaran.", imageUrls: ["assets/entrance/2.jpg", "assets/entrance/3.jpg"], videoUrls: [] },
+      { id: "f2-1", name: "Kelas 11.1", floor: "2", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 11.1.", imageUrls: ["assets/kelas/11.1/1.jpg"], videoUrls: [] },
+      { id: "f2-2", name: "Kelas 11.2", floor: "2", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 11.2.", imageUrls: ["assets/kelas/11.2/1.jpg"], videoUrls: [] },
+      { id: "f2-3", name: "Kelas 11.3", floor: "2", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 11.3.", imageUrls: ["assets/kelas/11.3/1.jpg"], videoUrls: [] },
+      { id: "f2-4", name: "Ruang Peminatan", floor: "2", category: "Facility", capacity: 25, icon: "🛋️", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 11.1 yang memilih jurusan kesosialan (IPS).", imageUrls: ["assets/kelas/minat/1.jpg"], videoUrls: [] },
+      { id: "f2-5", name: "Kelas Seni Musik Teori", floor: "2", category: "Facility", capacity: 25, icon: "🎹", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid yang memilih seni musik sebagai mata pelajaran pilihan kesenian.", imageUrls: ["assets/kelas/musikkelas/1.jpg"], videoUrls: [] },
+      { id: "f2-6", name: "Toilet", floor: "2", category: "Facility", capacity: 15, icon: "🚽", desc: "Toilet sekolah merupakan fasilitas yang disediakan untuk memenuhi kebutuhan kebersihan para siswa, guru, dan orang-orang lain. Ada 3 fasilitas toilet di sekolah tersebut, dan setiap toilet sekolah berada di masing-masing lantai. Setiap toilet sekolah terdapat 4 urinal, 2 toilet, dan sebuah kloset. Selain itu, diluar fasilitas toilet terdapat wastafel dan cermin yang digunakan untuk mencuci tangan serta menjaga kebersihan diri.", imageUrls: ["assets/toilet/1.jpg", "assets/toilet/5.jpg"], videoUrls: ["assets/toilet/6.mp4", "assets/toilet/7.mp4", "assets/toilet/8.mp4"] },
+      { id: "f2-7", name: "Arsip", floor: "2", category: "Restricted", capacity: 30, icon: "📁", desc: "Ruangan khusus yang digunakan untuk menyimpan dan mengelola berbagai dokumen penting sekolah, seperti data siswa, catatan administrasi, serta berkas-berkas lainnya agar tersimpan dengan aman dan teratur.", imageUrls: ["assets/arsip/1.jpg"], videoUrls: [] },
+      { id: "f2-8", name: "Ruang Rapat", floor: "2", category: "Restricted", capacity: 16, icon: "🤝", desc: "Ruang tersebut merupakan ruangan yang digunakan untuk mengadakan pertemuan dan diskusi antara pihak sekolah, seperti kepala sekolah, guru, dan staf lainnya. Di dalam ruangan ini terdapat meja rapat, beberapa kursi, dan lain-lain. Ruangan ini digunakan untuk membahas program sekolah, mengevaluasi kegiatan, dan mengambil keputusan bersama.", imageUrls: ["assets/rapat/1.jpg"], videoUrls: [] },
+      { id: "f2-9", name: "UKS", floor: "2", category: "Facility", capacity: 8, icon: "🏥", desc: "Ruang ini merupakan fasilitas di sekolah yang berfungsi sebagai pusat pelayanan kesehatan dasar dan tempat penanganan pertama bagi peserta didik. UKS juga menjadi penanganan awal kepada siswa atau staf yang mengalami sakit ringan, pusing, kelelahan, atau cedera (seperti luka lecet) sebelum mendapat rujukan atau pertolongan medis lanjutan.", imageUrls: ["assets/uks/1.jpg"], videoUrls: [] },
+      { id: "f2-10", name: "Ruang Kelapa Sekolah", floor: "2", category: "Restricted", capacity: 6, icon: "👔", desc: "Kantor khusus Ibu Tri Agustina Wulandari, selaku kepala sekolah IPEKA Sunter II.", imageUrls: ["assets/kepsek/1.jpeg", "assets/kepsek/2.jpeg", "assets/kepsek/3.jpeg", "assets/kepsek/4.jpeg"], videoUrls: [] },
+      { id: "f2-11", name: "Kelas 12.1", floor: "2", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 12.1.", imageUrls: ["assets/kelas/12.1/1.jpeg", "assets/kelas/12.1/2.jpeg"], videoUrls: ["assets/kelas/12.1/3.mp4", "assets/kelas/12.1/4.mp4"] },
+      { id: "f2-12", name: "Kelas 12.2", floor: "2", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 12.2.", imageUrls: ["assets/kelas/12.2/1.jpeg", "assets/kelas/12.2/2.jpeg"], videoUrls: ["assets/kelas/12.2/3.mp4", "assets/kelas/12.2/4.mp4"] },
+      { id: "f2-13", name: "Kelas 12.3", floor: "2", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 12.3.", imageUrls: ["assets/kelas/12.3/1.jpeg"], videoUrls: ["assets/kelas/12.3/2.mp4"] },
+      { id: "f2-14", name: "Kelas 12.4", floor: "2", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 12.4.", imageUrls: ["assets/kelas/12.4/1.jpeg"], videoUrls: ["assets/kelas/12.4/2.mp4"] },
+      { id: "f2-15", name: "Kelas 12.5", floor: "2", category: "Classroom", capacity: 32, icon: "🎓", desc: "Ruangan yang digunakan sebagai tempat berlangsungnya kegiatan belajar mengajar antara guru dan siswa. Ruangan ini dilengkapi dengan fasilitas seperti meja, kursi, papan tulis, televisi, dan perlengkapan lainnya untuk mendukung proses pembelajaran agar berjalan dengan nyaman dan efektif. Kelas ini secara khusus digunakan murid kelas 12.5.", imageUrls: ["assets/kelas/12.5/1.jpeg"], videoUrls: [] },
+      { id: "f2-16", name: "Ruang Server", floor: "2", category: "Restricted", capacity: 3, icon: "🖥", desc: "Fasilitas yang berfungsi sebagai pusat penyimpanan dan pengelolaan data serta sistem jaringan sekolah, sehingga mendukung kelancaran akses internet dan penggunaan teknologi dalam kegiatan sekolah.", imageUrls: ["assets/pabilly/1.jpeg", "assets/pabilly/2.jpeg"], videoUrls: ["assets/pabilly/3.mp4"] },
+
+      // FLOOR 3
+      { id: "f3-1", name: "Laboratorium Kimia", floor: "3", category: "Laboratory", capacity: 36, icon: "🧪", desc: "Ruangan yang digunakan untuk melakukan praktikum dan percobaan kimia, seperti mempelajari sifat zat, reaksi kimia, serta perubahan materi dengan menggunakan peralatan dan bahan kimia sesuai prosedur keselamatan.", imageUrls: ["assets/lab/kim/1.jpg"], videoUrls: [] },
+      { id: "f3-2", name: "Laboratorium Biologi", floor: "3", category: "Laboratory", capacity: 36, icon: "🔬", desc: "Ruangan yang digunakan untuk kegiatan praktikum dan pengamatan makhluk hidup serta proses biologis, seperti mengamati sel, jaringan, tumbuhan, dan organisme menggunakan mikroskop maupun alat praktikum lainnya.", imageUrls: ["assets/lab/bio/1.jpg"], videoUrls: [] },
+      { id: "f3-3", name: "Portal SMP", floor: "3", category: "Facility", capacity: 0, icon: "🪜", desc: "Melalui portal, anda dapat melewati batas SMA dan memasuki gedung SMP.", imageUrls: ["assets/portal/1.jpeg", "assets/portal/2.jpeg"], videoUrls: ["assets/portal/3.mp4"] },
+      { id: "f3-4", name: "Laboratorium Fisika", floor: "3", category: "Laboratory", capacity: 36, icon: "⚡", desc: "Ruangan yang digunakan untuk melakukan berbagai kegiatan praktikum dan percobaan fisika, seperti mempelajari gerak, gaya, energi, listrik, dan fenomena alam lainnya dengan menggunakan alat-alat praktikum.", imageUrls: ["assets/lab/fis/1.jpeg", "assets/lab/fis/2.jpeg", "assets/lab/fis/3.jpeg"], videoUrls: ["assets/lab/fis/4.mp4", "assets/lab/fis/5.mp4"] },
+      { id: "f3-5", name: "Gudang", floor: "3", category: "Restricted", capacity: 5, icon: "📁", desc: "Gudang biasa saja...", imageUrls: ["assets/gudang/1.jpg", "assets/gudang/2.jpg"], videoUrls: [] },
+      { id: "f3-6", name: "Ruang Musik", floor: "3", category: "Facility", capacity: 30, icon: "🎵", desc: "Ruang tersebut merupakan ruangan yang digunakan oleh siswa untuk mempraktikkan karya seni musik. Di dalam ruangan ini terdapat berbagai alat musik, seperti gitar elektrik, keyboard, drum, bass, dan gitar akustik. Ruang ini biasanya digunakan untuk latihan musik dan pembelajaran berkaitan. Wajib melepaskan sepatu terlebih dahulu sebelum memasuki ruangan.", imageUrls: ["assets/musik/1.jpg"], videoUrls: [] },
+      { id: "f3-7", name: "Toilet", floor: "3", category: "Facility", capacity: 15, icon: "🚽", desc: "Toilet sekolah merupakan fasilitas yang disediakan untuk memenuhi kebutuhan kebersihan para siswa, guru, dan orang-orang lain. Ada 3 fasilitas toilet di sekolah tersebut, dan setiap toilet sekolah berada di masing-masing lantai. Setiap toilet sekolah terdapat 4 urinal, 2 toilet, dan sebuah kloset. Selain itu, diluar fasilitas toilet terdapat wastafel dan cermin yang digunakan untuk mencuci tangan serta menjaga kebersihan diri.", imageUrls: ["assets/toilet/1.jpg", "assets/toilet/5.jpg"], videoUrls: ["assets/toilet/6.mp4", "assets/toilet/7.mp4", "assets/toilet/8.mp4"] },
+      { id: "f3-8", name: "Ruang Tata Boga", floor: "3", category: "Facility", capacity: 24, icon: "🍳", desc: "Ruangan yang dilengkapi dengan peralatan memasak dan perlengkapan dapur untuk mendukung kegiatan pembelajaran praktik, khususnya dalam bidang pengolahan makanan, memasak, dan keterampilan tata boga.", imageUrls: ["assets/pkwu/1.jpg", "assets/pkwu/2.jpg"], videoUrls: [] },
+      { id: "f3-9", name: "Laboratorium Komputer", floor: "3", category: "Laboratory", capacity: 40, icon: "💻", desc: "Laboratorium ini dibagi menjadi dua, yaitu lab komputer SMP dan SMA. Di sini seringkali dilaksanakan Tes Kemampuan Akademik, Asesmen Nasional Berbasis Komputer, dan yang lainnya.", imageUrls: [], videoUrls: ["assets/lab/pc/1.mp4", "assets/lab/pc/2.mp4"] },
+      { id: "f3-10", name: "Aula", floor: "3", category: "Facility", capacity: 150, icon: "⛪", desc: "The place to serve our creator! Christ!", imageUrls: ["assets/aula/5.jpeg", "assets/aula/6.jpeg", "assets/aula/7.jpeg", "assets/aula/8.jpeg", "assets/aula/9.jpeg", "assets/aula/10.jpeg", "assets/aula/11.jpeg"], videoUrls: ["assets/aula/1.mp4", "assets/aula/2.mp4", "assets/aula/3.mp4", "assets/aula/4.mp4", "assets/aula/12.mp4"] }
+    ];
+
+    let rooms = JSON.parse(localStorage.getItem("school_tour_rooms")) || INITIAL_ROOMS;
+    let isAdmin = false;
+    let currentRoomId = null;
+    let openRoomId = null;
+    let query = "";
+    let filter = "All";
+
+    const DEFAULT_ADMIN_PASSWORD = "admin";
+    const PASS_KEY = "school_tour_admin_pass";
+    const MASTER_PIN = "25082010";
+    function getAdminPassword() {
+      try { return localStorage.getItem(PASS_KEY) || DEFAULT_ADMIN_PASSWORD; } catch (err) { return DEFAULT_ADMIN_PASSWORD; }
+    }
+    const SETTINGS_KEY = "school_tour_settings";
+    const DEFAULT_BG = ["#074eb3", "#005695", "#063153", "#004B87"];
+    let settings = { lite: false, status: true, hideFilters: false, hideFloors: false, hideHero: false, hideDeco: false, bgColors: null };
+    try { Object.assign(settings, JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}); } catch (err) {}
+    if (!Array.isArray(settings.bgColors) || settings.bgColors.length !== 4 || !settings.bgColors.every(c => /^#[0-9a-f]{6}$/i.test(c))) settings.bgColors = null;
+
+    const FLOORS = ["1", "2", "3"];
+    const markersEl = document.getElementById("markers");
+    const floorNavEl = document.getElementById("floorNav");
+    const adminLoginBtn = document.getElementById("adminLoginBtn");
+    const adminLogoutBtn = document.getElementById("adminLogoutBtn");
+    const addClassroomBtn = document.getElementById("addClassroomBtn");
+    const accessStatus = document.getElementById("accessStatus");
+    const heroEl = document.getElementById("hero");
+    const heroKicker = document.getElementById("heroKicker");
+    const heroTitle = document.getElementById("heroTitle");
+    const heroLede = document.getElementById("heroLede");
+    const docsStack = document.getElementById("docsStack");
+    const docsOpen = document.getElementById("docsOpen");
+    const HOME = { kicker: heroKicker.textContent, title: heroTitle.textContent, lede: heroLede.textContent };
+
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, c => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+      ));
+    }
+
+    function plural(n, word) { return n + " " + word + (n === 1 ? "" : "s"); }
+
+    function saveToStorage() {
+      localStorage.setItem("school_tour_rooms", JSON.stringify(rooms));
+    }
+
+    function matches(r) {
+      const q = query.trim().toLowerCase();
+      const okCat = filter === "All" || r.category === filter;
+      const okQuery = !q || r.name.toLowerCase().includes(q);
+      return okCat && okQuery;
+    }
+
+    function mediaLabel(r) {
+      const p = (r.imageUrls || []).length;
+      const v = (r.videoUrls || []).length;
+      if (!p && !v) return "No media yet";
+      const parts = [];
+      if (p) parts.push(plural(p, "photo"));
+      if (v) parts.push(plural(v, "video"));
+      return parts.join(", ");
+    }
+
+    function renderApp(animate = false) {
+      let navHtml = "";
+      let mainHtml = "";
+
+      FLOORS.forEach(fl => {
+        const floorRooms = rooms.filter(r => r.floor === fl && matches(r));
+        if (floorRooms.length === 0) return;
+
+        navHtml += `
+          <a class="floor-link" href="#floor-${fl}" data-floor="${fl}">
+            <span class="mini-plate">${fl}</span>
+            <span>Floor ${fl}<small>${plural(floorRooms.length, "room")}</small></span>
+          </a>`;
+
+        const tiles = floorRooms.map((r, i) => {
+          const hasMedia = (r.imageUrls || []).length + (r.videoUrls || []).length > 0;
+          const seats = r.capacity > 0 ? `👥 ${r.capacity}` : "";
+          return `
+            <button type="button" class="room${r.id === openRoomId ? " selected" : ""}" style="--i:${i}" data-cat="${esc((r.category || "").toLowerCase())}" data-id="${esc(r.id)}">
+              <span class="room-icon" aria-hidden="true">${esc(r.icon)}</span>
+              <span class="room-name">${esc(r.name)}</span>
+              <span class="room-foot">
+                <span class="room-kind">${esc(r.category)}</span>
+                <span class="room-seats">${seats}</span>
+              </span>
+              <span class="media-state ${hasMedia ? "has-media" : ""}">${mediaLabel(r)}</span>
+            </button>`;
+        }).join("");
+
+        mainHtml += `
+          <section class="floor" id="floor-${fl}" data-floor="${fl}">
+            <header class="floor-head">
+              <h2 class="plate" aria-label="Floor ${fl}"><small>Floor</small><b>${fl}</b></h2>
+              <span class="floor-count">${plural(floorRooms.length, "room")}</span>
+              <span class="rule"></span>
+            </header>
+            <div class="room-grid">${tiles}</div>
+          </section>`;
+      });
+
+      if (!mainHtml) {
+        mainHtml = `
+          <div class="empty">
+            <b>No rooms match</b>
+            Clear the search or choose another category.
+          </div>`;
+      }
+
+      floorNavEl.innerHTML = navHtml;
+      markersEl.innerHTML = mainHtml;
+      markersEl.classList.toggle("enter", animate);
+    }
+
+    markersEl.addEventListener("click", e => {
+      const tile = e.target.closest(".room");
+      if (tile) showRoom(tile.dataset.id);
+    });
+
+    document.getElementById("searchInput").addEventListener("input", e => {
+      query = e.target.value;
+      renderApp();
+    });
+
+    document.getElementById("filterChips").addEventListener("click", e => {
+      const chip = e.target.closest(".chip");
+      if (!chip) return;
+      filter = chip.dataset.filter;
+      document.querySelectorAll("#filterChips .chip").forEach(c =>
+        c.setAttribute("aria-pressed", c === chip ? "true" : "false")
+      );
+      renderApp(true);
+    });
+
+    function openModal(id) { document.getElementById(id).classList.add("open"); }
+    function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+    document.querySelectorAll(".modal").forEach(m => {
+      m.addEventListener("mousedown", e => { if (e.target === m) closeModal(m.id); });
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        const openModals = document.querySelectorAll(".modal.open");
+        if (openModals.length) openModals.forEach(m => closeModal(m.id));
+        else if (currentView === "settings" && settingsGroup) { settingsGroup = null; renderSettingsList(); }
+        else if (currentView !== "map") showView("map");
+        else if (heroEl.dataset.docs === "open") collapseDocs();
+        else if (openRoomId) closeRoom();
+      }
+      if ((e.key === "ArrowLeft" || e.key === "ArrowRight") && heroEl.dataset.docs === "open" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
+        const b = document.querySelector("#docsOpen ." + (e.key === "ArrowLeft" ? "prev" : "next"));
+        if (b) b.click();
+      }
+    });
+
+    function videoSlide(url) {
+      const yt = url.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
+      if (yt) return `<iframe src="https://www.youtube.com/embed/${yt[1]}" title="Room video" loading="lazy" allowfullscreen></iframe>`;
+      if (/\.(mp4|webm|ogg|mov)(\?|#|$)/i.test(url)) return `<video src="${esc(url)}" controls playsinline preload="metadata"></video>`;
+      return `<a class="car-link" href="${esc(url)}" target="_blank" rel="noopener"><span class="big">🎬</span><span>Open video</span></a>`;
+    }
+
+    let marqueeRAF = 0;
+
+    function renderMarquee(room) {
+      const slides = [
+        ...(room.imageUrls || []).map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}" alt="${esc(room.name)} photo ${i + 1}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'car-fail',textContent:'📷 Photo failed to load. Check the file name and path.'}))"></a>`),
+        ...(room.videoUrls || []).map(videoSlide)
+      ];
+      if (!slides.length) return `<div class="car-empty"><span class="big">📷</span>No photos or videos yet.</div>`;
+      const multi = slides.length > 1;
+      return `
+        <div class="mq${multi ? "" : " single"}">
+          <div class="mq-view"><div class="mq-rail">${slides.map(h => `<div class="mq-slide">${h}</div>`).join("")}</div></div>
+          ${multi ? `<button type="button" class="car-btn prev" aria-label="Previous">‹</button><button type="button" class="car-btn next" aria-label="Next">›</button><button type="button" class="mq-toggle"></button>` : ""}
+        </div>`;
+    }
+
+    function wireMarquee(root) {
+      const rail = root.querySelector(".mq-rail");
+      const view = root.querySelector(".mq-view");
+      if (!rail || !root.querySelector(".prev")) return;
+      const orig = [...rail.children], n = orig.length;
+      const step = () => orig[1].offsetLeft - orig[0].offsetLeft;
+      const copies = Math.max(1, Math.ceil(view.clientWidth * 2 / (step() * n)) + 1);
+      for (let c = 0; c < copies; c++) orig.forEach(el => {
+        const k = el.cloneNode(true);
+        k.setAttribute("aria-hidden", "true");
+        k.inert = true;
+        rail.appendChild(k);
+      });
+
+      const toggle = root.querySelector(".mq-toggle");
+      let x = 0, jump = 0, paused = reduceMotion(), playing = 0, holdUntil = 0, last = performance.now();
+      const label = () => { toggle.textContent = paused ? "▶ Play" : "⏸ Pause"; };
+      label();
+
+      view.addEventListener("pointerdown", () => holdUntil = performance.now() + 3000);
+      rail.addEventListener("play", () => playing++, true);
+      rail.addEventListener("pause", () => playing = Math.max(0, playing - 1), true);
+      root.querySelector(".prev").onclick = () => { jump -= step(); };
+      root.querySelector(".next").onclick = () => { jump += step(); };
+      toggle.onclick = () => { paused = !paused; label(); };
+
+      const tick = now => {
+        if (!rail.isConnected) return;
+        const dt = Math.min(.05, (now - last) / 1000); last = now;
+        const setW = step() * n;
+        if (!paused && !playing && now >= holdUntil) x += 45 * dt;
+        if (jump) {
+          const d = jump * Math.min(1, dt * 8);
+          x += d; jump -= d;
+          if (Math.abs(jump) < .5) { x += jump; jump = 0; }
+        }
+        x = ((x % setW) + setW) % setW;
+        rail.style.transform = `translate3d(${-x}px,0,0)`;
+        marqueeRAF = requestAnimationFrame(tick);
+      };
+      marqueeRAF = requestAnimationFrame(tick);
+    }
+
+    const reduceMotion = () => settings.lite || matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function replay(el) { el.style.animation = "none"; void el.offsetWidth; el.style.animation = ""; }
+
+    function stopMedia() {
+      cancelAnimationFrame(marqueeRAF);
+      docsOpen.querySelectorAll("video").forEach(v => v.pause());
+      docsOpen.querySelectorAll("iframe").forEach(f => { f.src = ""; });
+    }
+
+    function videoThumb(url) {
+      const yt = url.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
+      if (yt) return `<img src="https://i.ytimg.com/vi/${yt[1]}/hqdefault.jpg" alt="">`;
+      if (/\.(mp4|webm|ogg|mov)(\?|#|$)/i.test(url)) return `<video src="${esc(url)}#t=0.1" muted playsinline preload="metadata"></video>`;
+      return `<span class="big">🎬</span>`;
+    }
+
+    function stackHtml(room) {
+      const thumbs = [
+        ...(room.imageUrls || []).map(u => `<img src="${esc(u)}" alt="" decoding="async" onerror="this.style.display='none'">`),
+        ...(room.videoUrls || []).map(videoThumb)
+      ];
+      if (!thumbs.length) return `<div class="stack"><div class="doc-card empty"><span class="big">${esc(room.icon)}</span>No photos or videos yet</div></div>`;
+      const cards = thumbs.slice(0, 4).map((t, k) => `<div class="doc-card" style="--k:${k};z-index:${10 - k}">${t}${k === 0 ? `<span class="stack-hint">${plural(thumbs.length, "item")}, tap to open</span>` : ""}</div>`).join("");
+      return `<button type="button" class="stack" aria-label="Open documentation, ${plural(thumbs.length, "item")}">${cards}</button>`;
+    }
+
+    function syncRoomActions() {
+      const room = rooms.find(r => r.id === openRoomId);
+      const edit = document.getElementById("editRoomBtn");
+      const del = document.getElementById("deleteRoomBtn");
+      edit.classList.toggle("hidden", !(isAdmin && room));
+      del.classList.toggle("hidden", !(isAdmin && room));
+      if (room) {
+        edit.onclick = () => openEditModal(room);
+        del.onclick = () => deleteRoom(room.id);
+      }
+    }
+
+    function showRoom(id, scroll = true) {
+      const room = rooms.find(r => r.id === id);
+      if (!room) return closeRoom();
+      openRoomId = id;
+      stopMedia();
+      docsOpen.innerHTML = "";
+      heroEl.removeAttribute("data-docs");
+      heroEl.dataset.mode = "room";
+      heroEl.dataset.cat = (room.category || "").toLowerCase();
+      heroKicker.textContent = `${room.icon} ${room.category}`;
+      heroTitle.textContent = room.name;
+      heroLede.textContent = room.desc || "";
+      heroLede.hidden = !room.desc;
+      [heroKicker, heroTitle, heroLede].forEach(replay);
+      document.getElementById("roomFloor").textContent = room.floor;
+      document.getElementById("roomCapacity").textContent = room.capacity;
+      document.getElementById("photoCount").textContent = (room.imageUrls || []).length;
+      document.getElementById("videoCount").textContent = (room.videoUrls || []).length;
+      docsStack.innerHTML = stackHtml(room);
+      syncRoomActions();
+      document.querySelectorAll(".room").forEach(t => t.classList.toggle("selected", t.dataset.id === id));
+      if (scroll) scrollTo(0, 0);
+    }
+
+function closeRoom() {
+  openRoomId = null;
+  stopMedia();
+  docsOpen.innerHTML = "";
+  docsStack.innerHTML = "";
+  heroEl.removeAttribute("data-docs");
+  heroEl.removeAttribute("data-cat");
+  heroEl.dataset.mode = "home";
+  heroKicker.textContent = HOME.kicker;
+  heroTitle.textContent = HOME.title;
+  heroLede.textContent = HOME.lede;
+  heroLede.hidden = false;
+  [heroKicker, heroTitle, heroLede].forEach(replay);
+  document.querySelectorAll(".room.selected").forEach(t => t.classList.remove("selected"));
+  syncRoomActions();
+  
+  // Re-render the grid to ensure all active filter matches display properly
+  renderApp(false); 
+  scrollTo(0, 0);
+}
+
+    function expandDocs() {
+      const room = rooms.find(r => r.id === openRoomId);
+      if (!room) return;
+      docsOpen.innerHTML = `<button type="button" class="car-collapse">↙ Collapse</button>` + renderMarquee(room);
+      heroEl.dataset.docs = "open";
+      wireMarquee(docsOpen);
+      requestAnimationFrame(() => {
+        const bar = document.querySelector(".topbar");
+        const offset = (bar ? bar.getBoundingClientRect().bottom : 0) + 16;
+        // offsetTop ignores the pop-in animation's transform, so the target is exact
+        let y = 0;
+        for (let el = docsOpen; el; el = el.offsetParent) y += el.offsetTop;
+        scrollTo({ top: Math.max(0, y - offset), behavior: reduceMotion() ? "auto" : "smooth" });
+      });
+    }
+
+    function collapseDocs() {
+      stopMedia();
+      docsOpen.innerHTML = "";
+      heroEl.removeAttribute("data-docs");
+      scrollTo(0, 0);
+    }
+
+    document.getElementById("docs").addEventListener("click", e => {
+      if (e.target.closest("button.stack")) expandDocs();
+      else if (e.target.closest(".car-collapse")) collapseDocs();
+    });
+    document.getElementById("closeRoomBtn").addEventListener("click", closeRoom);
+
+    const HOME_PHOTOS = [
+      { src: "https://ipeka.org/wp-content/uploads/2021/05/IPEKA-SUNTER-II-1024x683-4.webp", alt: "IPEKA Jalin Kerja Sama dengan Saint Louis University" },
+      { src: "https://file.data.kemendikdasmen.go.id/sekolahkita/20/2010/20107383-1.jpg", alt: "" },
+      { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoKEyTJwRlJTyhffPz8jn6BDtPMYPq71DilR_q9SvSRp8G8plpDyljCe6X&s=10", alt: "" },
+      { src: "https://multimedia.beritajakarta.id/photo/berita/2026/b19e3591666a89e8831d0b96e02734c6.jpg", alt: "" },
+      { src: "https://www.dbl.id/thumbs/medium/uploads/post/2022/09/13/roadshow%20ipsun%203.jpg", alt: "" },
+      { src: "https://file.data.kemendikdasmen.go.id/sekolahkita/20/2010/20107383-2.jpg", alt: "" }
+    ];
+    const PH_TONES = [["--pc", "--on-pc"], ["--tc", "--on-tc"], ["--sc", "--on-sc"], ["--pk", "--on-pc"]];
+    const homeStack = document.getElementById("homeStack");
+    let homeOffset = 0;
+
+    function applyPile() {
+      const n = HOME_PHOTOS.length;
+      [...homeStack.children].forEach((c, i) => {
+        const prevK = c.dataset.k;
+        const k = (i - homeOffset + n) % n;
+        c.dataset.k = k;
+        
+        if (prevK === "0" && k === n - 1) {
+          c.classList.remove("toss");
+          void c.offsetWidth; // trigger reflow
+          c.classList.add("toss");
+          setTimeout(() => c.classList.remove("toss"), 600);
+        }
+
+        c.style.setProperty("--k", Math.min(k, 3));
+        c.style.zIndex = 10 - k;
+        c.style.opacity = k < 4 ? 1 : 0;
+      });
+    }
+
+    homeStack.innerHTML = HOME_PHOTOS.map((p, i) => {
+      const t = PH_TONES[i % PH_TONES.length];
+      const body = p.src
+        ? `<img src="${esc(p.src)}" alt="${esc(p.alt)}" onerror="this.parentNode.classList.add('ph');this.replaceWith(document.createTextNode('Photo failed to load'))">`
+        : `<span class="big">🖼️</span>Photo ${i + 1} goes here`;
+      return `<div class="doc-card${p.src ? "" : " ph"}" style="--ph:var(${t[0]});--ph-on:var(${t[1]})">${body}</div>`;
+    }).join("");
+    applyPile();
+
+    setInterval(() => {
+      if (settings.lite || document.hidden || heroEl.dataset.mode !== "home" || HOME_PHOTOS.length < 2) return;
+      homeOffset = (homeOffset + 1) % HOME_PHOTOS.length;
+      applyPile();
+    }, 3000);
+
+    function openAddModal() {
+      document.getElementById("formTitle").textContent = "Add New Room";
+      document.getElementById("fName").value = "";
+      document.getElementById("fFloor").value = "1";
+      document.getElementById("fCategory").value = "Classroom";
+      document.getElementById("fCapacity").value = "32";
+      document.getElementById("fIcon").value = "🎓";
+      document.getElementById("fDescription").value = "";
+      document.getElementById("fImageUrls").value = "";
+      document.getElementById("fVideoUrls").value = "";
+      currentRoomId = null;
+      openModal("formModal");
+    }
+
+    function openEditModal(room) {
+      currentRoomId = room.id;
+      document.getElementById("formTitle").textContent = "Edit Room & Media";
+      document.getElementById("fName").value = room.name;
+      document.getElementById("fFloor").value = room.floor;
+      document.getElementById("fCategory").value = room.category;
+      document.getElementById("fCapacity").value = room.capacity;
+      document.getElementById("fIcon").value = room.icon;
+      document.getElementById("fDescription").value = room.desc || "";
+      document.getElementById("fImageUrls").value = (room.imageUrls || []).join(", ");
+      document.getElementById("fVideoUrls").value = (room.videoUrls || []).join(", ");
+      openModal("formModal");
+    }
+
+    function handleSaveRoom(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("fName").value;
+      const floor = document.getElementById("fFloor").value;
+      const category = document.getElementById("fCategory").value;
+      const capacity = parseInt(document.getElementById("fCapacity").value) || 30;
+      const icon = document.getElementById("fIcon").value || "🎓";
+      const desc = document.getElementById("fDescription").value.trim();
+
+      const imageUrls = document.getElementById("fImageUrls").value
+        .split(",")
+        .map(url => url.trim())
+        .filter(url => url.length > 0);
+
+      const videoUrls = document.getElementById("fVideoUrls").value
+        .split(",")
+        .map(url => url.trim())
+        .filter(url => url.length > 0);
+
+      if (currentRoomId) {
+        const index = rooms.findIndex(r => r.id === currentRoomId);
+        if (index !== -1) {
+          rooms[index] = { ...rooms[index], name, floor, category, capacity, icon, desc, imageUrls, videoUrls };
+        }
+      } else {
+        rooms.push({
+          id: "room-" + Date.now(),
+          name, floor, category, capacity, icon, desc, imageUrls, videoUrls
+        });
+      }
+
+      saveToStorage();
+      renderApp();
+      closeModal("formModal");
+      if (openRoomId) showRoom(openRoomId, false);
+    }
+
+    function deleteRoom(id) {
+      if (confirm("Are you sure you want to remove this room?")) {
+        rooms = rooms.filter(r => r.id !== id);
+        saveToStorage();
+        renderApp();
+        closeRoom();
+      }
+    }
+
+// Admin Notification Elements & Handlers
+const adminNotice = document.getElementById("adminNotice");
+const adminNoticeForm = document.getElementById("adminNoticeForm");
+const adminNoticeErr = document.getElementById("adminNoticeErr");
+const loginPassInput = document.getElementById("loginPass");
+const closeAdminNoticeBtn = document.getElementById("closeAdminNoticeBtn");
+
+function openAdminNotice() {
+  if (!adminNotice) return;
+  resetForgot("admin");
+  adminNoticeErr.classList.remove("show");
+  adminNotice.classList.add("open");
+  loginPassInput.value = "";
+  setTimeout(() => loginPassInput.focus(), 50);
+}
+
+function closeAdminNotice() {
+  if (!adminNotice) return;
+  adminNotice.classList.remove("open");
+  loginPassInput.value = "";
+  adminNoticeErr.classList.remove("show");
+}
+
+// Open notification when topbar button is clicked
+// Handle logout button click
+// Open notification when topbar button is clicked
+if (adminLoginBtn) {
+  adminLoginBtn.onclick = (e) => {
+    e.stopPropagation();
+    openAdminNotice();
+  };
+}
+if (adminLogoutBtn) {
+  adminLogoutBtn.onclick = (e) => {
+    e.stopPropagation();
+    toggleAdminMode(false);
+  };
+}
+
+// Close notification on 'X' button click
+if (closeAdminNoticeBtn) {
+  closeAdminNoticeBtn.onclick = (e) => {
+    e.stopPropagation();
+    closeAdminNotice();
+  };
+}
+
+// Handle login form submission & auto-close
+if (adminNoticeForm) {
+  adminNoticeForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (loginPassInput.value === getAdminPassword()) {
+      toggleAdminMode(true);
+      closeAdminNotice(); // Instantly auto-closes on successful login
+    } else {
+      adminNoticeErr.classList.add("show");
+      loginPassInput.select();
+      adminNotice.classList.remove("shake");
+      void adminNotice.offsetWidth; // Force CSS reflow to re-trigger shake animation
+      adminNotice.classList.add("shake");
+    }
+  });
+}
+
+// Auto-close when clicking outside the notification box
+document.addEventListener("click", (e) => {
+  if (
+    adminNotice &&
+    adminNotice.classList.contains("open") &&
+    !adminNotice.contains(e.target) &&
+    e.target !== adminLoginBtn
+  ) {
+    closeAdminNotice();
+  }
+});
+
+    function toggleAdminMode(enabled) {
+      isAdmin = enabled;
+      accessStatus.textContent = isAdmin ? "Edit Mode" : "Public Viewer";
+      accessStatus.classList.toggle("is-admin", isAdmin);
+
+      adminLoginBtn.classList.toggle("hidden", isAdmin);
+      adminLogoutBtn.classList.toggle("hidden", !isAdmin);
+      addClassroomBtn.classList.toggle("hidden", !isAdmin);
+      syncRoomActions();
+      renderTeachers();
+    }
+
+    document.addEventListener("pointerdown", e => {
+      const t = e.target.closest(".room, .btn-action, .btn-accent, .chip, .floor-link");
+      if (!t || settings.lite) return;
+      const r = t.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2;
+      const dot = document.createElement("span");
+      dot.className = "ripple";
+      dot.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`;
+      t.appendChild(dot);
+      dot.addEventListener("animationend", () => dot.remove());
+    });
+
+    /* ---------- Teachers & faculty ---------- */
+    const TEACHERS_KEY = "school_tour_teachers";
+
+    // Placeholder portraits (real <img> files). Replace with actual photos via the Edit form.
+    function makePortrait({ bg1, bg2, skin, hair, shirt, long = false, glasses = false }) {
+      const back = long ? `<path d="M118 235 C106 120 156 78 200 78 C244 78 294 120 282 235 L296 392 L104 392 Z" fill="${hair}"/>` : "";
+      const front = long
+        ? `<path d="M126 226 C120 138 160 120 204 122 C246 124 280 142 274 226 C262 176 236 156 198 158 C164 160 138 180 126 226 Z" fill="${hair}"/>`
+        : `<path d="M127 218 C120 136 160 120 200 120 C242 120 282 136 273 218 C262 178 236 160 200 160 C164 160 138 178 127 218 Z" fill="${hair}"/>`;
+      const specs = glasses
+        ? `<g fill="none" stroke="#2b2230" stroke-width="5"><circle cx="171" cy="238" r="22"/><circle cx="229" cy="238" r="22"/><path d="M193 238 H207"/></g>` : "";
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${bg1}"/><stop offset="1" stop-color="${bg2}"/></linearGradient></defs>`
+        + `<rect width="400" height="500" fill="url(#g)"/>${back}`
+        + `<path d="M36 500 C46 402 120 366 200 366 C280 366 354 402 364 500 Z" fill="${shirt}"/>`
+        + `<rect x="173" y="298" width="54" height="80" rx="22" fill="${skin}"/>`
+        + `<path d="M168 368 L200 414 L232 368 Z" fill="#fff" opacity=".92"/>`
+        + `<ellipse cx="200" cy="232" rx="70" ry="82" fill="${skin}"/>${front}`
+        + `<circle cx="173" cy="238" r="6" fill="#2b2230"/><circle cx="227" cy="238" r="6" fill="#2b2230"/>${specs}`
+        + `<path d="M176 276 Q200 296 224 276" fill="none" stroke="#7a3b3b" stroke-width="6" stroke-linecap="round"/></svg>`;
+      return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    }
+
+    const INITIAL_TEACHERS = [
+      { id: "t-1", name: "Tri Agustina Wulandari", subject: "Kepala Sekolah", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/tri.jpg"},
+      { id: "t-2", name: "Elisabeth Fitriana Dwi Kurniasih", subject: "Asisten Kurikulum, Kimia Kelas 11", title: "Sarjana Sains, Magister Pendidikan",
+        photo: "assets/teachers/elis.png"},
+      { id: "t-3", name: "Ndaru Anugerah", subject: "Asisten Kesiswaan, IEP Kelas 12", title: "Sarjana Teknik, Magister Pendidikan",
+        photo: "assets/teachers/ndaru.jpg"},
+      { id: "t-4", name: "Yohanes Puja Piris", subject: "Pembina Kerohanian, Pendidikan Agama Kristen Kelas 12", title: "Penatalayan, Sarjana Ilmu Komunikasi, Magister Divinitas, Magister Ministry",
+        photo: "assets/teachers/yopie.png"},
+      { id: "t-5", name: "Hendry Bernike", subject: "Student Pathway Counselor", title: "Sarjana Psikologi",
+        photo: "assets/teachers/hendry.jpeg"},
+      { id: "t-6", name: "Stefanus Kartika Wahyu Nugroho Putro", subject: "Wali Kelas 10.1, Sejarah Indonesia", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/hoho.png"},
+      { id: "t-7", name: "Rina Theresia Ariasih", subject: "Wali Kelas 10.2, IEP Kelas 10", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/rina.png"},
+      { id: "t-8", name: "Sartikha Rahayu Bian", subject: "Wali Kelas 10.3, Sosiologi Kelas 10, Prakarya Pengelolaan Kelas 12", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/tikha.jpg"},
+      { id: "t-9", name: "Meisi Widia Kalalo", subject: "Wali Kelas 11.1, Pendidikan Pancasila", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/meisi.jpeg"},
+      { id: "t-10", name: "Maria Regina Anna Hadi Kusumawardani", subject: "Wali Kelas 11.2, IEP Kelas 11", title: "Sarjana Pendidikan, Magister Humaniora",
+          photo: "assets/teachers/maria.jpeg" },
+      { id: "t-11", name: "Jenny Erfina Saragih", subject: "Wali Kelas 11.3, Sosiologi Kelas 11 & 12", title: "Sarjana Kesehatan Masyarakat, Magister Humaniora",
+        photo: "assets/teachers/jenny.jpeg"},
+      { id: "t-12", name: "Gunawan", subject: "Wali Kelas 12.1, Matematika Wajib Kelas 12 IPA, Matematika Tingkat Lanjut", title: "Magister Pendidikan",
+        photo: "assets/teachers/gunawan.jpeg"},
+      { id: "t-13", name: "Christiana Istianingsih Sutoyo", subject: "Wali Kelas 12.2, Bahasa Indonesia Kelas 12", title: "Magister Pendidikan",
+        photo: "assets/teachers/ch.jpg"},
+      { id: "t-14", name: "Tularno Djoko Setiawan", subject: "Wali Kelas 12.3, Fisika Kelas 11 & 12", title: "Sarjana Sains, Magister Pendidikan",
+        photo: "assets/teachers/djoko.png"},
+      { id: "t-15", name: "Yakub Tri Santoso", subject: "Wali Kelas 12.4, Matematika Wajib Kelas 10 & 11 & 12 IPS", title: "Magister Pendidikan",
+        photo: "assets/teachers/yakub.jpg"},
+      { id: "t-16", name: "Handoko", subject: "Wali Kelas 12.5, Geografi", title: "Magister Pendidikan",
+        photo: "assets/teachers/edo.png"},
+      { id: "t-17", name: "Rodearni Purba", subject: "Bahasa Indonesia Kelas 10 & 11", title: "Magister Pendidikan, Guru Professional",
+        photo: "assets/teachers/dear.png"},
+      { id: "t-18", name: "Gratia Theovanny Yosua", subject: "Pendidikan Agama Kristen Kelas 10 & 11", title: "Magister Teologi",
+        photo: "assets/teachers/gratia.jpg"},
+      { id: "t-19", name: "Russell Rene", subject: "Fisika Kelas 8 & 10", title: "Sarjana Sains",
+        photo: "assets/teachers/russel.jpg"},
+      { id: "t-20", name: "Yulianto", subject: "Biologi", title: "Sarjana Pertanian",
+        photo: "assets/teachers/yulianto.jpg"},
+      { id: "t-21", name: "Antonius Anggar Bagas Kumoro", subject: "Praktikum Biologi & Kimia", title: "Sarjana Pertanian",
+        photo: "assets/teachers/anggar.png"},
+      { id: "t-22", name: "Veronica Julanti", subject: "Praktikum Fisika", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/juli.jpeg"},
+      { id: "t-23", name: "Michael Ebenhaezer Silalahi", subject: "Informatika Kelas 10 & 12", title: "Sarjana Teknik, Magister Agama, Teknik Informatika",
+        photo: "assets/teachers/eben.jpeg"},
+      { id: "t-24", name: "Robertus Hami", subject: "Informatika Kelas 8 & 11", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/roby.png"},
+      { id: "t-25", name: "Ida Wahyuni", subject: "Kimia Kelas 10 & 12", title: "Sarjana Sains, Magister Pendidikan",
+        photo: "assets/teachers/ida.png"},
+      { id: "t-26", name: "David Satria Widiadinata", subject: "Seni Rupa", title: "Sarjana Desain",
+        photo: "assets/teachers/david.jpg"},
+      { id: "t-27", name: "Immanuel Filipus Bernardus", subject: "Seni Musik", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/imman.png"},
+      { id: "t-28", name: "Yohanes Arga Pribadi", subject: "Ekonomi", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/yoga.jpeg"},
+      { id: "t-29", name: "Winanda Monica Phihilia", subject: "Bimbingan Konseling Kelas 10.1 & 10,2 & 11.3 & 12 IPS", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/wina.jpeg"},
+      { id: "t-30", name: "Gerson Hasiholan Nokas", subject: "Bimbingan Konseling Kelas 10.3 & 11.1 & 11.2 & 12 IPA", title: "Evangelis, Sarjana Teologi",
+        photo: "assets/teachers/gerson.jpg"},
+      { id: "t-31", name: "Septyan Pemardo Pasaribu", subject: "Pendidikan Jasmani, Olahraga, dan Kesehatan", title: "Sarjana Pendidikan",
+        photo: "assets/teachers/septyan.jpg"},
+      { id: "t-32", name: "Erlina Willie", subject: "Mandarin", title: "Sarjana Managemen, Magister Pendidikan",
+        photo: "assets/teachers/erlina.jpeg"}
+    ];
+
+    let teachers;
+    try { teachers = JSON.parse(localStorage.getItem(TEACHERS_KEY)); } catch (err) { teachers = null; }
+    if (!Array.isArray(teachers) || !teachers.length) teachers = INITIAL_TEACHERS;
+
+    let currentTeacherId = null;
+    let teacherPhotoValue = "";
+
+    const teacherGrid = document.getElementById("teacherGrid");
+    const addTeacherBtn = document.getElementById("addTeacherBtn");
+
+    function saveTeachers() {
+      try { localStorage.setItem(TEACHERS_KEY, JSON.stringify(teachers)); }
+      catch (err) { alert("Could not save: storage is full. Try a smaller photo or use a photo URL instead."); }
+    }
+
+    function initials(name) {
+      const parts = String(name).replace(/^(Ibu|Bapak|Pak|Bu)\s+/i, "").split(/[\s,.]+/).filter(Boolean);
+      return ((parts[0] || "?")[0] + (parts[1] ? parts[1][0] : "")).toUpperCase();
+    }
+
+    function renderTeachers() {
+      addTeacherBtn.classList.toggle("hidden", !isAdmin);
+      if (!teachers.length) {
+        teacherGrid.innerHTML = `<div class="empty" style="grid-column:1/-1"><b>Belum ada guru</b>Tambahkan guru dari mode Administrator.</div>`;
+        return;
+      }
+      teacherGrid.innerHTML = teachers.map((t, i) => {
+        const photo = t.photo
+          ? `<img src="${esc(t.photo)}" alt="Foto ${esc(t.name)}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'teacher-initials',textContent:'${esc(initials(t.name))}'}))">`
+          : `<span class="teacher-initials">${esc(initials(t.name))}</span>`;
+        const actions = isAdmin ? `
+          <div class="teacher-actions">
+            <button type="button" class="btn-action" data-edit="${esc(t.id)}">✏️ Edit</button>
+            <button type="button" class="btn-action btn-danger" data-delete="${esc(t.id)}">🗑️ Delete</button>
+          </div>` : "";
+        return `
+          <article class="teacher" data-tone="${i % 3}" style="--i:${i}">
+            <div class="teacher-photo">${photo}</div>
+            <div class="teacher-body">
+              <span class="teacher-title">${esc(t.title)}</span>
+              <h3 class="teacher-name">${esc(t.name)}</h3>
+               <p class="teacher-subject">${esc(t.subject)}</p>
+            </div>
+            ${actions}
+          </article>`;
+      }).join("");
+    }
+
+    function setPhotoPreview(src) {
+      const box = document.getElementById("tPhotoPreview");
+      box.textContent = "No photo";
+      if (!src) return;
+      const img = document.createElement("img");
+      img.alt = "Preview";
+      img.onerror = () => { box.textContent = "Failed to load"; };
+      img.src = src;
+      box.textContent = "";
+      box.appendChild(img);
+    }
+
+    function openTeacherForm(t) {
+      currentTeacherId = t ? t.id : null;
+      document.getElementById("teacherFormTitle").textContent = t ? "Edit Teacher" : "Add Teacher";
+      document.getElementById("tName").value = t ? t.name : "";
+      document.getElementById("tSubject").value = t ? t.subject : "";
+      document.getElementById("tTitle").value = t ? t.title : "";
+      teacherPhotoValue = t ? (t.photo || "") : "";
+      document.getElementById("tPhotoUrl").value = teacherPhotoValue.startsWith("data:") ? "" : teacherPhotoValue;
+      document.getElementById("tPhotoFile").value = "";
+      setPhotoPreview(teacherPhotoValue);
+      openModal("teacherFormModal");
+    }
+
+    document.getElementById("tPhotoUrl").addEventListener("input", e => {
+      teacherPhotoValue = e.target.value.trim();
+      setPhotoPreview(teacherPhotoValue);
+    });
+
+    document.getElementById("tPhotoFile").addEventListener("change", e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const scale = Math.min(1, 480 / img.width);
+          const c = document.createElement("canvas");
+          c.width = Math.round(img.width * scale);
+          c.height = Math.round(img.height * scale);
+          c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+          teacherPhotoValue = c.toDataURL("image/jpeg", .85);
+          document.getElementById("tPhotoUrl").value = "";
+          setPhotoPreview(teacherPhotoValue);
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function handleSaveTeacher(e) {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById("tName").value.trim(),
+        subject: document.getElementById("tSubject").value.trim(),
+        title: document.getElementById("tTitle").value.trim(),
+        photo: teacherPhotoValue
+      };
+      if (currentTeacherId) {
+        const i = teachers.findIndex(t => t.id === currentTeacherId);
+        if (i !== -1) teachers[i] = { ...teachers[i], ...data };
+      } else {
+        teachers.push({ id: "t-" + Date.now(), ...data });
+      }
+      saveTeachers();
+      renderTeachers();
+      closeModal("teacherFormModal");
+    }
+
+    teacherGrid.addEventListener("click", e => {
+      const edit = e.target.closest("[data-edit]");
+      const del = e.target.closest("[data-delete]");
+      if (edit) openTeacherForm(teachers.find(t => t.id === edit.dataset.edit));
+      if (del && confirm("Are you sure you want to remove this teacher?")) {
+        teachers = teachers.filter(t => t.id !== del.dataset.delete);
+        saveTeachers();
+        renderTeachers();
+      }
+    });
+
+    const teachersView = document.getElementById("teachersView");
+    const settingsView = document.getElementById("settingsView");
+    const layoutEl = document.querySelector(".layout");
+    const TAB_BUTTONS = { map: "closeTeachersBtn", teachers: "teachersBtn", settings: "settingsBtn" };
+    let currentView = "map";
+
+    function setActiveTab(view) {
+      Object.entries(TAB_BUTTONS).forEach(([name, id]) => {
+        const b = document.getElementById(id);
+        b.classList.toggle("is-active", name === view);
+        if (name === view) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+      });
+    }
+
+   function showView(view) {
+  if (view === currentView) return;
+  const leaving = currentView;
+  currentView = view;
+  setActiveTab(view);
+  if (leaving === "settings") lockSettings();
+
+  const isMap = view === "map";
+  heroEl.classList.toggle("hidden", !isMap);
+  layoutEl.classList.toggle("hidden", !isMap);
+  teachersView.classList.toggle("hidden", view !== "teachers");
+  settingsView.classList.toggle("hidden", view !== "settings");
+
+  if (isMap) {
+    // Remove 'revisit' class so keyframe animations can run
+    document.querySelector(".shell").classList.remove("revisit");
+    
+    // Trigger flyover (rise) animation on hero elements and sidebar
+    const sidebar = document.querySelector(".sidebar");
+    [heroKicker, heroTitle, heroLede, sidebar].forEach(el => {
+      if (el) replay(el);
+    });
+
+    // Re-render markers with entrance animation enabled
+    renderApp(true);
+  } else if (view === "teachers") {
+    renderTeachers();
+    replay(teachersView);
+  } else {
+    replay(settingsView);
+    settingsPass.focus({ preventScroll: true });
+  }
+  scrollTo(0, 0);
+}
+
+    document.getElementById("teachersBtn").onclick = () => showView("teachers");
+    document.getElementById("closeTeachersBtn").onclick = () => showView("map");
+    document.getElementById("settingsBtn").onclick = () => showView("settings");
+
+    /* ---------- Settings (password-gated, separate from admin mode) ---------- */
+    const SETTING_DEFS = [
+      { key: "lite", title: "Lite mode", desc: "Turns off every animation and the moving background, and stops the photo carousel from auto-playing. Helps on slower devices." },
+      { key: "status", title: "Status display", desc: "Shows the Public Viewer / Edit Mode badge in the top bar. Turn it off to hide the badge." },
+      { key: "hideFilters", title: "Hide filters", desc: "Removes the keyword search and category filters from the Denah Gedung tab." },
+      { key: "hideFloors", title: "Hide jump to floor", desc: "Removes the floor shortcuts from the Denah Gedung tab. If filters are hidden too, the whole side column goes away." },
+      { key: "hideHero", title: "Hide hero banner", desc: "Hides the big title banner at the top of Denah Gedung, Guru-Guru and Settings. On Denah Gedung it still appears when you open a room, and the Add Teacher button stays available in Edit Mode." },
+      { key: "hideDeco", title: "Hide circular decorations", desc: "Hides the floating circles and shapes (the confetti) scattered across the background." },
+      { key: "bgColors", type: "colors", title: "Personalize background colors", desc: "Pick the colors of the moving blobs in the background. Not visible while Lite mode is on." },
+      { key: "password", type: "password", title: "Change admin password", desc: "Sets a new password for Admin Login and for this Settings page. It is saved on this device only." }
+    ];
+    const settingsGate = document.getElementById("settingsGate");
+    const settingsGateForm = document.getElementById("settingsGateForm");
+    const settingsGateError = document.getElementById("settingsGateError");
+    const settingsPass = document.getElementById("settingsPass");
+    const settingsList = document.getElementById("settingsList");
+    const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+    function saveSettings() {
+      try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (err) {}
+    }
+
+    function applyBgColors() {
+      const root = document.documentElement.style;
+      [1, 2, 3, 4].forEach((n, i) => {
+        if (settings.bgColors) root.setProperty("--bg" + n, settings.bgColors[i]); else root.removeProperty("--bg" + n);
+      });
+    }
+
+    function applySettings() {
+      document.documentElement.classList.toggle("lite", settings.lite);
+      accessStatus.classList.toggle("hidden", !settings.status);
+      document.documentElement.classList.toggle("hide-deco", settings.hideDeco);
+      document.documentElement.classList.toggle("hide-hero", settings.hideHero);
+      document.querySelectorAll(".filter-block").forEach(b => b.classList.toggle("hidden", settings.hideFilters));
+      document.querySelectorAll(".floor-block").forEach(b => b.classList.toggle("hidden", settings.hideFloors));
+      layoutEl.classList.toggle("no-sidebar", settings.hideFilters && settings.hideFloors);
+      applyBgColors();
+      if (settings.hideFilters && (query || filter !== "All")) {
+        query = ""; filter = "All";
+        document.getElementById("searchInput").value = "";
+        document.querySelectorAll("#filterChips .chip").forEach(c => c.setAttribute("aria-pressed", c.dataset.filter === "All" ? "true" : "false"));
+        renderApp();
+      }
+      if (settings.lite && heroEl.dataset.docs === "open") collapseDocs();
+    }
+
+    function renderSettingRow(d, i) {
+        const head = `
+          <div class="setting-text">
+            <div class="setting-title" id="st-${d.key}">${d.title}</div>
+            <p class="setting-desc" id="sd-${d.key}">${d.desc}</p>`;
+        if (d.type === "password") {
+          return `
+        <div class="setting-row static" style="--i:${i}">${head}
+            <form class="pw-form" id="changePassForm" autocomplete="off">
+              <input type="password" class="input-field" id="pwCurrent" placeholder="Current password" aria-label="Current password" required autocomplete="current-password">
+              <input type="password" class="input-field" id="pwNew" placeholder="New password" aria-label="New password" required minlength="4" autocomplete="new-password">
+              <input type="password" class="input-field" id="pwConfirm" placeholder="Confirm new password" aria-label="Confirm new password" required autocomplete="new-password">
+              <div class="pw-actions">
+                <button type="submit" class="btn-accent">Update password</button>
+                <span class="pw-msg" id="pwMsg" role="status"></span>
+              </div>
+            </form>
+          </div>
+        </div>`;
+        }
+        if (d.type === "colors") {
+          const cols = settings.bgColors || DEFAULT_BG;
+          return `
+        <div class="setting-row static" style="--i:${i}">${head}
+            <div class="swatches" role="group" aria-labelledby="st-${d.key}">
+              ${cols.map((c, n) => `<label class="swatch" style="--sw:${c}"><input type="color" value="${c}" data-i="${n}" aria-label="Background color ${n + 1}"></label>`).join("")}
+              <button type="button" class="btn-action" id="resetBgColors">Reset</button>
+            </div>
+          </div>
+        </div>`;
+        }
+        return `
+        <div class="setting-row" data-key="${d.key}" style="--i:${i}">${head}</div>
+          <button type="button" class="m3-switch" role="switch" aria-checked="${settings[d.key] ? "true" : "false"}" aria-labelledby="st-${d.key}" aria-describedby="sd-${d.key}">
+            <span class="knob">${CHECK_ICON}</span>
+          </button>
+        </div>`;
+    }
+
+    const ICON_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+    const SETTING_GROUPS = [
+      { id: "performance", title: "Performance", tone: 0, keys: ["lite"],
+        blurb: "Lite mode", desc: "Make the site lighter and faster on slower devices.",
+        icon: `<svg ${ICON_ATTRS}><path d="M13 2.5 4.5 13.5H11L10 21.5l8.5-11H12L13 2.5z"/></svg>` },
+      { id: "appearance", title: "Appearance", tone: 1, keys: ["status", "hideHero", "hideDeco", "bgColors"],
+        blurb: "Status, banner, decorations, colors", desc: "Choose what shows up on screen and how the background looks.",
+        icon: `<svg ${ICON_ATTRS}><path d="M12 3.5c-3 4-5.5 6.8-5.5 10.1a5.5 5.5 0 0 0 11 0C17.5 10.3 15 7.5 12 3.5z"/></svg>` },
+      { id: "map", title: "Denah Gedung", tone: 2, keys: ["hideFilters", "hideFloors"],
+        blurb: "Filters, jump to floor", desc: "Simplify the building map page.",
+        icon: `<svg ${ICON_ATTRS}><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>` },
+      { id: "security", title: "Security", tone: 3, keys: ["password"],
+        blurb: "Admin password", desc: "Manage access to Admin Login and these settings.",
+        icon: `<svg ${ICON_ATTRS}><rect x="4" y="10.5" width="16" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>` }
+    ];
+    let settingsGroup = null;
+
+    function renderSettingsList() {
+      const g = SETTING_GROUPS.find(x => x.id === settingsGroup);
+      if (!g) {
+        settingsGroup = null;
+        settingsList.innerHTML = `<div class="settings-hub">` + SETTING_GROUPS.map((t, i) => `
+          <button type="button" class="setting-tile" data-group="${t.id}" data-tone="${t.tone}" style="--i:${i}">
+            <span class="tile-icon" aria-hidden="true">${t.icon}</span>
+            <span class="tile-text"><span class="tile-title">${t.title}</span><span class="tile-sub">${t.blurb}</span></span>
+          </button>`).join("") + `</div>`;
+        return;
+      }
+      settingsList.innerHTML = `
+        <div class="settings-detail-head">
+          <button type="button" class="btn-action" id="settingsBack">← Settings</button>
+          <div><h2 class="detail-title">${g.title}</h2><p class="detail-desc">${g.desc}</p></div>
+        </div>
+        <div class="settings-rows">${g.keys.map((k, i) => renderSettingRow(SETTING_DEFS.find(d => d.key === k), i)).join("")}</div>`;
+    }
+
+    function lockSettings() {
+      settingsGroup = null;
+      resetForgot("settings");
+      settingsGate.classList.remove("hidden");
+      settingsList.classList.add("hidden");
+      settingsList.innerHTML = "";
+      settingsPass.value = "";
+      settingsGateError.textContent = "";
+    }
+
+    settingsGateForm.addEventListener("submit", e => {
+      e.preventDefault();
+      if (settingsPass.value === getAdminPassword()) {
+        settingsPass.value = "";
+        settingsGateError.textContent = "";
+        renderSettingsList();
+        settingsGate.classList.add("hidden");
+        settingsList.classList.remove("hidden");
+      } else {
+        settingsGateError.textContent = "Incorrect password. Please try again.";
+        settingsPass.select();
+        settingsGateForm.classList.remove("shake");
+        void settingsGateForm.offsetWidth;
+      }
+    });
+
+    settingsList.addEventListener("input", e => {
+      const inp = e.target.closest(".swatch input");
+      if (!inp) return;
+      const colors = (settings.bgColors || DEFAULT_BG).slice();
+      colors[+inp.dataset.i] = inp.value;
+      settings.bgColors = colors;
+      inp.parentNode.style.setProperty("--sw", inp.value);
+      applyBgColors();
+    });
+    settingsList.addEventListener("submit", e => {
+      if (e.target.id !== "changePassForm") return;
+      e.preventDefault();
+      const cur = document.getElementById("pwCurrent"), nw = document.getElementById("pwNew"), cf = document.getElementById("pwConfirm");
+      const msg = document.getElementById("pwMsg");
+      const say = (text, ok) => { msg.textContent = text; msg.className = "pw-msg " + (ok ? "ok" : "err"); };
+      if (cur.value !== getAdminPassword()) { say("Current password is incorrect.", false); cur.select(); return; }
+      if (nw.value.length < 4) { say("New password must be at least 4 characters.", false); nw.focus(); return; }
+      if (nw.value !== cf.value) { say("New passwords don't match.", false); cf.select(); return; }
+      if (nw.value === cur.value) { say("New password must be different from the current one.", false); nw.select(); return; }
+      try { localStorage.setItem(PASS_KEY, nw.value); } catch (err) { say("Couldn't save the new password on this device.", false); return; }
+      cur.value = nw.value = cf.value = "";
+      say("Password updated.", true);
+    });
+    settingsList.addEventListener("change", e => { if (e.target.closest(".swatch input")) saveSettings(); });
+
+    settingsList.addEventListener("click", e => {
+      const tile = e.target.closest(".setting-tile");
+      if (tile) {
+        settingsGroup = tile.dataset.group;
+        renderSettingsList();
+        settingsList.querySelector("#settingsBack").focus({ preventScroll: true });
+        return;
+      }
+      if (e.target.closest("#settingsBack")) {
+        const last = settingsGroup;
+        settingsGroup = null;
+        renderSettingsList();
+        const back = settingsList.querySelector(`[data-group="${last}"]`);
+        if (back) back.focus({ preventScroll: true });
+        return;
+      }
+      if (e.target.closest("#resetBgColors")) {
+        settings.bgColors = null;
+        settingsList.querySelectorAll(".swatch input").forEach((inp, n) => {
+          inp.value = DEFAULT_BG[n].toLowerCase();
+          inp.parentNode.style.setProperty("--sw", DEFAULT_BG[n]);
+        });
+        saveSettings();
+        applyBgColors();
+        return;
+      }
+      const row = e.target.closest(".setting-row");
+      if (!row || !row.dataset.key) return;
+      const key = row.dataset.key;
+      settings[key] = !settings[key];
+      row.querySelector(".m3-switch").setAttribute("aria-checked", settings[key] ? "true" : "false");
+      saveSettings();
+      applySettings();
+    });
+
+    addTeacherBtn.onclick = () => openTeacherForm(null);
+
+    /* ---------- Forgot password (master PIN reset) ---------- */
+    function buildForgotPanel(panel) {
+      panel.innerHTML = `
+        <div class="forgot-step" data-step="pin">
+          <div class="forgot-title">Reset with master PIN</div>
+          <p class="forgot-text">Enter the master PIN to choose a new administrator password.</p>
+          <form class="forgot-form" data-form="pin" autocomplete="off">
+            <input type="password" inputmode="numeric" class="input-field" placeholder="Master PIN" aria-label="Master PIN" required autocomplete="off">
+            <button type="submit" class="btn-accent">Continue</button>
+          </form>
+        </div>
+        <div class="forgot-step hidden" data-step="new">
+          <div class="forgot-title">Set a new password</div>
+          <p class="forgot-text">PIN accepted. Choose a new administrator password (at least 4 characters).</p>
+          <form class="forgot-form" data-form="new" autocomplete="off">
+            <input type="password" class="input-field" placeholder="New password" aria-label="New password" required minlength="4" autocomplete="new-password">
+            <input type="password" class="input-field" placeholder="Confirm new password" aria-label="Confirm new password" required autocomplete="new-password">
+            <button type="submit" class="btn-accent">Save new password</button>
+          </form>
+        </div>
+        <div class="forgot-step hidden" data-step="done">
+          <div class="forgot-title">Password updated</div>
+          <p class="forgot-text">Your new password is ready to use on this device.</p>
+        </div>
+        <div class="forgot-msg" role="alert"></div>
+        <div class="forgot-foot">
+          <button type="button" class="forgot-link" data-act="back">← ${esc(panel.dataset.back)}</button>
+        </div>`;
+    }
+
+    function forgotShowStep(panel, name) {
+      panel.querySelectorAll(".forgot-step").forEach(st => st.classList.toggle("hidden", st.dataset.step !== name));
+      panel.querySelector(".forgot-msg").textContent = "";
+      const input = panel.querySelector(`[data-step="${name}"] input`);
+      if (input) setTimeout(() => input.focus(), 0);
+    }
+
+    function openForgot(key) {
+      document.querySelectorAll(`[data-forgot-main="${key}"]`).forEach(el => el.classList.add("hidden"));
+      const panel = document.getElementById("forgotPanel-" + key);
+      panel.classList.remove("hidden");
+      forgotShowStep(panel, "pin");
+    }
+
+    function resetForgot(key) {
+      const panel = document.getElementById("forgotPanel-" + key);
+      if (!panel) return;
+      panel.classList.add("hidden");
+      panel.querySelectorAll("input").forEach(i => { i.value = ""; });
+      panel.querySelectorAll(".forgot-step").forEach(st => st.classList.toggle("hidden", st.dataset.step !== "pin"));
+      panel.querySelector(".forgot-msg").textContent = "";
+      document.querySelectorAll(`[data-forgot-main="${key}"]`).forEach(el => el.classList.remove("hidden"));
+    }
+
+    document.querySelectorAll(".forgot-panel").forEach(buildForgotPanel);
+
+    document.addEventListener("click", e => {
+      const open = e.target.closest("[data-forgot]");
+      if (open) { openForgot(open.dataset.forgot); return; }
+      const back = e.target.closest(".forgot-panel [data-act='back']");
+      if (back) {
+        const key = back.closest(".forgot-panel").id.replace("forgotPanel-", "");
+        resetForgot(key);
+        const main = document.getElementById(key === "settings" ? "settingsPass" : "loginPass");
+        setTimeout(() => main.focus(), 0);
+      }
+    });
+
+    document.addEventListener("submit", e => {
+      const form = e.target.closest(".forgot-form");
+      if (!form) return;
+      e.preventDefault();
+      const panel = form.closest(".forgot-panel");
+      const msg = panel.querySelector(".forgot-msg");
+      const say = (text, ok) => { msg.textContent = text; msg.className = "forgot-msg " + (ok ? "ok" : "err"); };
+      const fields = form.querySelectorAll("input");
+      if (form.dataset.form === "pin") {
+        if (fields[0].value === MASTER_PIN) { forgotShowStep(panel, "new"); return; }
+        say("Incorrect master PIN.", false);
+        fields[0].select();
+        form.classList.remove("shake"); void form.offsetWidth; form.classList.add("shake");
+        return;
+      }
+      const [nw, cf] = fields;
+      if (nw.value.length < 4) { say("New password must be at least 4 characters.", false); nw.focus(); return; }
+      if (nw.value !== cf.value) { say("The two passwords don't match.", false); cf.select(); return; }
+      try { localStorage.setItem(PASS_KEY, nw.value); } catch (err) { say("Couldn't save the new password on this device.", false); return; }
+      panel.querySelectorAll("input").forEach(i => { i.value = ""; });
+      forgotShowStep(panel, "done");
+      say("You can now sign in with the new password.", true);
+    });
+
+
+    applySettings();
+    renderApp(true);
+  </script>
+</body>
+</html>
