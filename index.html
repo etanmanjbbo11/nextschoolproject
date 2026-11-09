@@ -450,9 +450,9 @@
     .credit-person:nth-child(3) { --cc:var(--sc); --cc-on:var(--on-sc); }
     .credit-avatar { width:40px; height:40px; flex:none; display:grid; place-items:center; border-radius:50%; background:color-mix(in srgb,var(--cc-on) 16%,transparent); font-family:var(--display); font-weight:800; }
     .credit-person small { display:block; font-weight:600; font-size:.76rem; opacity:.8; }
-    .credits-link { display:flex; justify-content:center; align-items:center; gap:10px; width:100%; margin-top:16px; padding:12px 20px; border-radius:999px; background:var(--p); color:var(--on-p); font-weight:700; text-decoration:none; transition:transform .45s var(--spring), border-radius .3s; }
-    .credits-link:hover { transform:translateY(-3px); border-radius:18px; }
-    .credits-link:active { transform:scale(.96); }
+    .credits-link { display:flex; justify-content:center; align-items:center; gap:10px; width:100%; margin-top:16px; padding:14px 20px; border-radius:26px; background:var(--p); color:var(--on-p); font-weight:700; text-decoration:none; transition:transform .45s var(--spring), border-radius .3s cubic-bezier(.2,.8,.2,1); }
+    .credits-link:hover { transform:translateY(-3px); border-radius:14px; }
+    .credits-link:active { transform:scale(.98); border-radius:12px; }
     .credits-link svg { width:20px; height:20px; flex:none; }
     .credits-notice { margin-top:18px; padding:16px 18px; border-radius:24px; border:1px solid var(--line); color:var(--on2); font-size:.86rem; line-height:1.55; }
     .credits-notice b { color:var(--on); }
