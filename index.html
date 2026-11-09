@@ -435,6 +435,25 @@
     .m3-switch:active .knob { left:0; top:0; width:28px; height:28px; }
     .m3-switch[aria-checked="true"]:active .knob { left:20px; top:0; width:28px; height:28px; }
 
+
+    /* Credits (always visible, even while Settings is locked) */
+    .credits-panel { margin-top:20px; padding:24px 22px 26px; border-radius:40px; background:color-mix(in srgb,var(--s1) 82%,transparent); }
+    .credits-head { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+    .credits-icon { width:52px; height:52px; flex:none; display:grid; place-items:center; background:var(--tc); color:var(--on-tc); border-radius:60% 40% 55% 45% / 50% 60% 40% 50%; }
+    .credits-icon svg { width:26px; height:26px; }
+    .credits-head h2 { font-family:var(--display); font-weight:800; font-size:1.4rem; line-height:1.2; }
+    .credits-head p { color:var(--on2); font-size:.9rem; }
+    .credits-people { list-style:none; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+    .credit-person { display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:24px; background:var(--cc,var(--s3)); color:var(--cc-on,var(--on)); font-weight:700; line-height:1.25; }
+    .credit-person:nth-child(1) { --cc:var(--pc); --cc-on:var(--on-pc); }
+    .credit-person:nth-child(2) { --cc:var(--tc); --cc-on:var(--on-tc); }
+    .credit-person:nth-child(3) { --cc:var(--sc); --cc-on:var(--on-sc); }
+    .credit-avatar { width:40px; height:40px; flex:none; display:grid; place-items:center; border-radius:50%; background:color-mix(in srgb,var(--cc-on) 16%,transparent); font-family:var(--display); font-weight:800; }
+    .credit-person small { display:block; font-weight:600; font-size:.76rem; opacity:.8; }
+    .credits-notice { margin-top:18px; padding:16px 18px; border-radius:24px; border:1px solid var(--line); color:var(--on2); font-size:.86rem; line-height:1.55; }
+    .credits-notice b { color:var(--on); }
+    @media (max-width:560px) { .credits-panel { padding:18px 14px 20px; border-radius:32px; } }
+
     /* Password gate */
     .settings-gate { max-width:460px; margin:0 auto; padding:14px 0 10px; display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; }
     .gate-icon { width:64px; height:64px; display:grid; place-items:center; background:var(--pc); color:var(--on-pc); border-radius:60% 40% 55% 45% / 50% 60% 40% 50%; animation:morph 8s ease-in-out infinite; }
@@ -648,6 +667,24 @@
         </div>
         <div class="settings-list hidden" id="settingsList"></div>
       </div>
+
+      <section class="credits-panel" id="creditsPanel" aria-labelledby="creditsTitle">
+        <div class="credits-head">
+          <div class="credits-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.35-9.5-9A5.5 5.5 0 0 1 12 6.6 5.5 5.5 0 0 1 21.5 12c-2.5 4.65-9.5 9-9.5 9z"/></svg>
+          </div>
+          <div>
+            <h2 id="creditsTitle">Credits</h2>
+            <p>Para pengembang situs ini.</p>
+          </div>
+        </div>
+        <ul class="credits-people">
+          <li class="credit-person"><span class="credit-avatar" aria-hidden="true">E</span><span>Ethan Isaiah Manumpil</span></li>
+          <li class="credit-person"><span class="credit-avatar" aria-hidden="true">N</span><span>Nicholas Patrick Wiranata</span></li>
+          <li class="credit-person"><span class="credit-avatar" aria-hidden="true">R</span><span>Reinhard Evander Chai</span></li>
+        </ul>
+        <p class="credits-notice"><b>NOTE:</b> This site&rsquo;s visual design is heavily inspired by Google&rsquo;s Material Design and Google products. Google, Material Design, and related names, marks, and design elements are trademarks or copyrights of Google LLC. This is an independent school project and is not affiliated with, sponsored by, or endorsed by Google LLC.</p>
+      </section>
     </section>
   </div>
 
